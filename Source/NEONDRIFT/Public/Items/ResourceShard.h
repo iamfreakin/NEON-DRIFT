@@ -22,6 +22,6 @@ private:
     UPROPERTY() TWeakObjectPtr<APlayerShip> HomingTarget;
     UPROPERTY() UStaticMeshComponent* Mesh = nullptr;
 
-    float HomingAccel = 800.f;
+    float HomingAccel = 2000.f;
     FVector Velocity  = FVector::ZeroVector;
 };

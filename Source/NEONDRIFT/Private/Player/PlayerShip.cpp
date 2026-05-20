@@ -111,7 +111,7 @@ void APlayerShip::Tick(float DeltaTime)
     AddActorWorldOffset(Velocity * DeltaTime, true);
 
     // Ship yaw follows controller (camera direction), roll leans on strafe for visual flair
-    float TargetRoll  = MoveRightInput * -18.f;
+    float TargetRoll  = MoveRightInput * 18.f;
     FRotator TargetRot(0.f, ControlRot.Yaw, TargetRoll);
     SetActorRotation(FMath::RInterpTo(GetActorRotation(), TargetRot, DeltaTime, 8.f));
 
