@@ -3,6 +3,7 @@
 #include "NeonGameInstance.h"
 #include "ResourceShard.h"
 #include "NeonPlayerController.h"
+#include "ManualTurret.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -85,6 +86,23 @@ void APlayerShip::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    // When boarded in turret: freeze ship, route fire to turret
+    ANeonPlayerController* PC = Cast<ANeonPlayerController>(GetController());
+    if (PC && PC->BoardedTurret)
+    {
+        Velocity = FVector::ZeroVector;
+        if (bFiring)
+        {
+            FireCooldown -= DeltaTime;
+            if (FireCooldown <= 0.f)
+            {
+                PC->BoardedTurret->Fire();
+                FireCooldown = 1.f / FMath::Max(0.1f, Stats.FireRate);
+            }
+        }
+        return;
+    }
+
     // --- Flight physics (hover-craft: no gravity, uniform drag on all axes) ---
     FRotator ControlRot = GetControlRotation();
     FVector  FwdXY      = FRotator(0, ControlRot.Yaw, 0).Vector();
@@ -161,6 +179,14 @@ void APlayerShip::OnReady(const FInputActionValue&)
 
 void APlayerShip::FireOnce()
 {
+    // If boarded in turret, fire the turret instead
+    ANeonPlayerController* PC = Cast<ANeonPlayerController>(GetController());
+    if (PC && PC->BoardedTurret)
+    {
+        PC->BoardedTurret->Fire();
+        return;
+    }
+
     FVector Start = Muzzle->GetComponentLocation();
     FVector End   = Start + Muzzle->GetForwardVector() * 8000.f;
 
