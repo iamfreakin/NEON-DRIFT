@@ -1,8 +1,10 @@
 #include "ManualTurret.h"
 #include "Monster.h"
 #include "Components/StaticMeshComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Engine/StaticMesh.h"
 #include "UObject/ConstructorHelpers.h"
+#include "DrawDebugHelpers.h"
 
 AManualTurret::AManualTurret()
 {
@@ -29,16 +31,26 @@ AManualTurret::AManualTurret()
     BarrelMesh->SetRelativeScale3D(FVector(2.f, 0.3f, 0.3f));
     BarrelMesh->SetRelativeLocation(FVector(0, 0, 60));
 
+    TurretCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("TurretCamera"));
+    TurretCamera->SetupAttachment(RootComponent);
+    TurretCamera->bAutoActivate = false;
+
     Stats.RotationSpeed = 30.f;
     Stats.FireRate       = 5.f;
     Stats.AttackDamage   = 1.f;
     Stats.Range          = 6000.f;
 }
 
-void AManualTurret::SetActive(bool b)
+void AManualTurret::SetPlayerBoarded(bool b)
 {
-    bActive = b;
-    if (!b) FireCooldown = 0.f;
+    bPlayerBoarded = b;
+    if (b)
+        TurretCamera->Activate();
+    else
+    {
+        TurretCamera->Deactivate();
+        FireCooldown = 0.f;
+    }
 }
 
 void AManualTurret::ApplyStats(const FTurretStats& InStats)
@@ -49,24 +61,24 @@ void AManualTurret::ApplyStats(const FTurretStats& InStats)
 void AManualTurret::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    if (!bActive) return;
+    if (!bPlayerBoarded) return;
 
-    // Rotate barrel toward DesiredAim at limited speed (KEY mechanic)
+    // Float camera behind turret in world space — bypasses component scale issues
+    FVector AimDir = DesiredAim.Vector();
+    FVector CamLoc = GetActorLocation() - AimDir * 500.f + FVector(0.f, 0.f, 220.f);
+    TurretCamera->SetWorldLocationAndRotation(CamLoc, DesiredAim);
+
+    // Barrel rotates toward aim with speed limit (core upgrade mechanic)
     FRotator Current = BarrelMesh->GetComponentRotation();
     FRotator New     = FMath::RInterpConstantTo(Current, DesiredAim, DeltaTime, Stats.RotationSpeed);
     BarrelMesh->SetWorldRotation(FRotator(New.Pitch, New.Yaw, 0));
 
     FireCooldown -= DeltaTime;
-    if (FireCooldown <= 0.f)
-    {
-        Fire();
-        FireCooldown = 1.f / FMath::Max(0.1f, Stats.FireRate);
-    }
 }
 
 void AManualTurret::Fire()
 {
-    FVector Start = Muzzle->GetComponentLocation();
+    FVector Start = TurretCamera->GetComponentLocation();
     FVector End   = Start + BarrelMesh->GetForwardVector() * Stats.Range;
 
     FHitResult Hit;
@@ -75,6 +87,7 @@ void AManualTurret::Fire()
 
     if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
     {
+        DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.f, 6, FColor::Orange, false, 0.15f);
         if (IDamageable* D = Cast<IDamageable>(Hit.GetActor()))
             D->TakeHit(Stats.AttackDamage, 99);
     }

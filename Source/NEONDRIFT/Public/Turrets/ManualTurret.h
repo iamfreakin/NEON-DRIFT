@@ -4,6 +4,8 @@
 #include "NeonTypes.h"
 #include "ManualTurret.generated.h"
 
+class UCameraComponent;
+
 UCLASS()
 class NEONDRIFT_API AManualTurret : public AActor
 {
@@ -11,21 +13,26 @@ class NEONDRIFT_API AManualTurret : public AActor
 public:
     AManualTurret();
 
-    FRotator DesiredAim; // set each tick by PlayerController
-    bool     bActive = false;
+    FRotator DesiredAim;      // set each tick by PlayerController
+    bool     bPlayerBoarded = false;
 
-    void SetActive(bool b);
+    void SetPlayerBoarded(bool b);
     void ApplyStats(const FTurretStats& InStats);
+    void Fire(); // called by PlayerShip when boarded + LMB
+
+    FVector GetBarrelForward()  const { return BarrelMesh ? BarrelMesh->GetForwardVector() : FVector::ForwardVector; }
+    FVector GetMuzzleLocation() const { return Muzzle    ? Muzzle->GetComponentLocation() : GetActorLocation(); }
+
+    UPROPERTY(EditAnywhere) float BoardingRadius = 800.f;
 
     virtual void Tick(float DeltaTime) override;
 
 private:
-    UPROPERTY() UStaticMeshComponent* BaseMesh   = nullptr;
-    UPROPERTY() UStaticMeshComponent* BarrelMesh = nullptr;
-    UPROPERTY() USceneComponent*      Muzzle     = nullptr;
+    UPROPERTY() UStaticMeshComponent* BaseMesh    = nullptr;
+    UPROPERTY() UStaticMeshComponent* BarrelMesh  = nullptr;
+    UPROPERTY() USceneComponent*      Muzzle      = nullptr;
+    UPROPERTY() UCameraComponent*     TurretCamera= nullptr;
 
     FTurretStats Stats;
     float FireCooldown = 0.f;
-
-    void Fire();
 };
