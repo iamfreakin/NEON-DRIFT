@@ -23,9 +23,9 @@ AAutoTurret::AAutoTurret()
     SetActorScale3D(FVector(0.5f, 0.5f, 1.f));
 
     Stats.RotationSpeed = 120.f;
-    Stats.FireRate       = 3.f;
+    Stats.FireRate       = 1.0f;
     Stats.AttackDamage   = 0.5f;
-    Stats.Range          = 5000.f;
+    Stats.Range          = 2500.f;
 }
 
 void AAutoTurret::SetEnabled(bool bEnable)
