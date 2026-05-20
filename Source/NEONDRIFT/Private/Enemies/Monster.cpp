@@ -13,6 +13,7 @@ AMonster::AMonster()
     Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
     RootComponent = Mesh;
     Mesh->SetCollisionProfileName(TEXT("OverlapAll"));
+    Mesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 
     static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("/Engine/BasicShapes/Cube.Cube"));
     if (CubeMesh.Succeeded())
@@ -30,22 +31,17 @@ void AMonster::Tick(float DeltaTime)
 
     float DistToBase = FVector::Dist(GetActorLocation(), Base->GetActorLocation());
 
-    if (!bAttacking)
+    if (DistToBase <= AttackRange)
     {
-        if (DistToBase <= BaseRadius)
-        {
-            bAttacking = true;
-        }
-        else
-        {
-            FVector Dir = (Base->GetActorLocation() - GetActorLocation()).GetSafeNormal();
-            AddActorWorldOffset(Dir * MoveSpeed * DeltaTime, true);
-        }
+        // In range: stop and deal ranged DPS
+        Base->TakeHit(AttackDPS * DeltaTime, 0);
+        bAttacking = true;
     }
     else
     {
-        // Attack base
-        Base->TakeHit(AttackDPS * DeltaTime, 0);
+        bAttacking = false;
+        FVector Dir = (Base->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+        AddActorWorldOffset(Dir * MoveSpeed * DeltaTime, true);
     }
 }
 

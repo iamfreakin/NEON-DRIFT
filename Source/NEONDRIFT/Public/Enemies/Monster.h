@@ -31,6 +31,6 @@ public:
 private:
     UPROPERTY() UStaticMeshComponent* Mesh = nullptr;
     UPROPERTY() UMaterialInstanceDynamic* MID = nullptr;
-    bool bAttacking = false;
-    float BaseRadius = 600.f; // uu - distance to start attacking base
+    bool  bAttacking   = false;
+    float AttackRange  = 2000.f; // uu — stop here and shoot from range
 };
