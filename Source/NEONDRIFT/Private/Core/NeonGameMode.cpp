@@ -87,18 +87,17 @@ void ANeonGameMode::EnterPhase(EGamePhase NewPhase)
         AliveMonsters        = 0;
         SpawnedThisWave      = 0;
         SpawnAccum           = 0.f;
-        if (ManualTurret) ManualTurret->SetActive(true);
         break;
     }
     case EGamePhase::Shop:
-        if (ManualTurret) ManualTurret->SetActive(false);
+        if (ManualTurret) ManualTurret->SetPlayerBoarded(false);
         Cast<ANeonPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))
             ->ShopCursorIndex = 0;
         break;
 
     case EGamePhase::GameOver:
     case EGamePhase::Victory:
-        if (ManualTurret) ManualTurret->SetActive(false);
+        if (ManualTurret) ManualTurret->SetPlayerBoarded(false);
         break;
 
     default: break;
@@ -191,6 +190,8 @@ void ANeonGameMode::SpawnMonsterAtEntrance(int32 EntranceIdx)
     const FWaveDef& W = WaveTable[WaveIndex];
     ESpawnDir Dir     = W.Entrances[EntranceIdx];
     FVector   Loc     = GetSpawnLocation(Dir);
+    // Override Z so monsters always spawn above ground regardless of SpawnPoint placement
+    Loc.Z = (Base ? Base->GetActorLocation().Z : 0.f) + MonsterSpawnHeight;
 
     AMonster* M = GetWorld()->SpawnActor<AMonster>(AMonster::StaticClass(), Loc, FRotator::ZeroRotator);
     if (!M) return;
@@ -256,9 +257,10 @@ void ANeonGameMode::SpawnResourceField()
         // Random ring position
         float Angle  = FMath::FRandRange(0.f, 2.f * PI);
         float Radius = FMath::FRandRange(BlockSpawnMinRadius, BlockSpawnRadius);
-        FVector Loc  = Center + FVector(FMath::Cos(Angle) * Radius,
-                                         FMath::Sin(Angle) * Radius,
-                                         BlockSpawnHeight);
+        float Z      = Center.Z + BlockSpawnHeight + FMath::FRandRange(0.f, 300.f);
+        FVector Loc  = FVector(Center.X + FMath::Cos(Angle) * Radius,
+                               Center.Y + FMath::Sin(Angle) * Radius,
+                               Z);
 
         AResourceBlock* Block = GetWorld()->SpawnActor<AResourceBlock>(
             AResourceBlock::StaticClass(), Loc, FRotator::ZeroRotator);
@@ -277,7 +279,7 @@ void ANeonGameMode::InitDefaultTables()
             W.TotalMonsters = Num;
             W.MonsterHP     = HP;
             W.SpawnInterval = Interval;
-            W.MoveSpeed     = 1000.f;
+            W.MoveSpeed     = 350.f;
             W.AttackDPS     = 1.f;
             return W;
         };

@@ -6,6 +6,7 @@
 class UInputMappingContext;
 class UInputAction;
 class AManualTurret;
+class APlayerShip;
 
 UCLASS()
 class NEONDRIFT_API ANeonPlayerController : public APlayerController
@@ -27,16 +28,19 @@ public:
     UPROPERTY() UInputAction*         IA_ShopConfirm = nullptr;
     UPROPERTY() UInputAction*         IA_NextWave    = nullptr;
     UPROPERTY() UInputAction*         IA_Restart     = nullptr;
+    UPROPERTY() UInputAction*         IA_Interact    = nullptr;
+
+    UPROPERTY() AManualTurret* BoardedTurret = nullptr;
 
     virtual void SetupInputComponent() override;
     virtual void Tick(float DeltaSeconds) override;
 
-    // UI input handlers (bound in BeginPlay)
     void OnShopUp();
     void OnShopDown();
     void OnShopConfirm();
     void OnNextWave();
     void OnRestart();
+    void OnInteract();
 
     int32 ShopCursorIndex = 0;
 

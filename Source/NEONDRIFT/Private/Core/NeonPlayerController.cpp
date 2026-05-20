@@ -64,6 +64,7 @@ void ANeonPlayerController::BuildIMC()
     IA_ShopConfirm = MakeBoolAction(this, IMC, EKeys::Enter,           TEXT("IA_ShopConfirm"));
     IA_NextWave    = MakeBoolAction(this, IMC, EKeys::Tab,             TEXT("IA_NextWave"));
     IA_Restart     = MakeBoolAction(this, IMC, EKeys::R,               TEXT("IA_Restart"));
+    IA_Interact    = MakeBoolAction(this, IMC, EKeys::E,               TEXT("IA_Interact"));
 
     if (UEnhancedInputLocalPlayerSubsystem* Sub =
         ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
@@ -85,6 +86,7 @@ void ANeonPlayerController::SetupInputComponent()
         EIC->BindAction(IA_ShopConfirm, ETriggerEvent::Started, this, &ANeonPlayerController::OnShopConfirm);
         EIC->BindAction(IA_NextWave,    ETriggerEvent::Started, this, &ANeonPlayerController::OnNextWave);
         EIC->BindAction(IA_Restart,     ETriggerEvent::Started, this, &ANeonPlayerController::OnRestart);
+        EIC->BindAction(IA_Interact,    ETriggerEvent::Started, this, &ANeonPlayerController::OnInteract);
     }
 }
 
@@ -124,6 +126,32 @@ void ANeonPlayerController::OnNextWave()
 {
     ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
     if (GM) GM->ContinueToNextWave();
+}
+
+void ANeonPlayerController::OnInteract()
+{
+    if (BoardedTurret)
+    {
+        BoardedTurret->SetPlayerBoarded(false);
+        BoardedTurret = nullptr;
+        SetViewTargetWithBlend(GetPawn(), 0.25f);
+        return;
+    }
+
+    APlayerShip* Ship = Cast<APlayerShip>(GetPawn());
+    if (!Ship) return;
+
+    FVector ShipLoc = Ship->GetActorLocation();
+    for (TActorIterator<AManualTurret> It(GetWorld()); It; ++It)
+    {
+        if (FVector::Dist(ShipLoc, It->GetActorLocation()) <= It->BoardingRadius)
+        {
+            BoardedTurret = *It;
+            BoardedTurret->SetPlayerBoarded(true);
+            SetViewTargetWithBlend(BoardedTurret, 0.25f);
+            return;
+        }
+    }
 }
 
 void ANeonPlayerController::OnRestart()
