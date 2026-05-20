@@ -52,8 +52,14 @@ void AResourceShard::Tick(float DeltaTime)
         return;
     }
 
+    // Kill tangential (sideways) velocity so shards fly straight instead of orbiting
+    FVector Dir = ToShip.GetSafeNormal();
+    float   RadialSpeed = FVector::DotProduct(Velocity, Dir);
+    FVector Tangential  = Velocity - Dir * RadialSpeed;
+    Velocity = Dir * RadialSpeed + Tangential * FMath::Exp(-10.f * DeltaTime);
+
     // Accelerate toward ship, capped at 2500 uu/s
-    Velocity += ToShip.GetSafeNormal() * HomingAccel * DeltaTime;
+    Velocity += Dir * HomingAccel * DeltaTime;
     if (Velocity.Size() > 2500.f) Velocity = Velocity.GetSafeNormal() * 2500.f;
 
     AddActorWorldOffset(Velocity * DeltaTime);
