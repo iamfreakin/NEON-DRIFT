@@ -3,6 +3,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Materials/MaterialInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "EngineUtils.h"
 
 AAutoTurret::AAutoTurret()
@@ -26,6 +29,21 @@ AAutoTurret::AAutoTurret()
     Stats.FireRate       = 1.0f;
     Stats.AttackDamage   = 0.5f;
     Stats.Range          = 2500.f;
+
+    static ConstructorHelpers::FObjectFinder<UMaterialInterface> NeonMat(TEXT("/Game/Materials/M_NeonBase.M_NeonBase"));
+    if (NeonMat.Succeeded())
+        Mesh->SetMaterial(0, NeonMat.Object);
+}
+
+void AAutoTurret::BeginPlay()
+{
+    Super::BeginPlay();
+    MID = Mesh->CreateAndSetMaterialInstanceDynamic(0);
+    if (MID)
+    {
+        MID->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.f, 1.f, 0.35f)); // Green
+        MID->SetScalarParameterValue(TEXT("Glow"), 3.f);
+    }
 }
 
 void AAutoTurret::SetEnabled(bool bEnable)
@@ -97,6 +115,9 @@ void AAutoTurret::FireAtTarget()
     if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
     {
         if (IDamageable* D = Cast<IDamageable>(Hit.GetActor()))
+        {
             D->TakeHit(Stats.AttackDamage, 99);
+            if (FireSound) UGameplayStatics::SpawnSoundAtLocation(this, FireSound, Start);
+        }
     }
 }

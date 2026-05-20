@@ -25,12 +25,15 @@ public:
     UPROPERTY() TWeakObjectPtr<ABase>         BaseRef;
     UPROPERTY() TWeakObjectPtr<ANeonGameMode> GameModeRef;
 
+    virtual void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;
     virtual void TakeHit(float Damage, int32 AttackerPower) override;
 
 private:
     UPROPERTY() UStaticMeshComponent* Mesh = nullptr;
     UPROPERTY() UMaterialInstanceDynamic* MID = nullptr;
-    bool  bAttacking   = false;
-    float AttackRange  = 2000.f; // uu — stop here and shoot from range
+    bool  bAttacking          = false;
+    bool  bMIDInitialized     = false;
+    float AttackRange         = 2000.f;
+    float AttackSoundCooldown = 0.f;
 };

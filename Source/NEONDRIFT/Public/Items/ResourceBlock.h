@@ -13,6 +13,9 @@ public:
 
     void InitFromDef(const FBlockDef& Def);
 
+    float GetHPFraction()   const { return MaxHP > 0.f ? HP / MaxHP : 0.f; }
+    FLinearColor GetBarColor() const { return EmissiveColor; }
+
     virtual void TakeHit(float Damage, int32 AttackerPower) override;
 
 private:
@@ -21,6 +24,7 @@ private:
 
     int32 RequiredPower = 1;
     float HP            = 3.f;
+    float MaxHP         = 3.f;
     int32 ShardMin      = 5;
     int32 ShardMax      = 8;
     int32 ShardValue    = 1;

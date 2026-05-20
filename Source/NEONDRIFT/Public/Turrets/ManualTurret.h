@@ -3,6 +3,7 @@
 #include "GameFramework/Actor.h"
 #include "NeonTypes.h"
 #include "Components/StaticMeshComponent.h"
+#include "Sound/SoundBase.h"
 #include "ManualTurret.generated.h"
 
 class UCameraComponent;
@@ -25,7 +26,11 @@ public:
     FVector GetMuzzleLocation() const { return Muzzle    ? Muzzle->GetComponentLocation() : GetActorLocation(); }
 
     UPROPERTY(EditAnywhere) float BoardingRadius = 800.f;
+    UPROPERTY(EditAnywhere, Category="Audio") USoundBase* FireSound    = nullptr;
+    UPROPERTY(EditAnywhere, Category="Audio") USoundBase* BoardSound   = nullptr;
+    UPROPERTY(EditAnywhere, Category="Audio") USoundBase* UnboardSound = nullptr;
 
+    virtual void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;
 
 private:

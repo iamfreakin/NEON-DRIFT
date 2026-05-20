@@ -4,6 +4,9 @@
 #include "Camera/CameraComponent.h"
 #include "Engine/StaticMesh.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Materials/MaterialInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 
 AManualTurret::AManualTurret()
@@ -31,6 +34,13 @@ AManualTurret::AManualTurret()
     BarrelMesh->SetRelativeScale3D(FVector(2.f, 0.3f, 0.3f));
     BarrelMesh->SetRelativeLocation(FVector(0, 0, 60));
 
+    static ConstructorHelpers::FObjectFinder<UMaterialInterface> NeonMat(TEXT("/Game/Materials/M_NeonBase.M_NeonBase"));
+    if (NeonMat.Succeeded())
+    {
+        BaseMesh->SetMaterial(0, NeonMat.Object);
+        BarrelMesh->SetMaterial(0, NeonMat.Object);
+    }
+
     TurretCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("TurretCamera"));
     TurretCamera->SetupAttachment(RootComponent);
     TurretCamera->bAutoActivate = false;
@@ -41,15 +51,32 @@ AManualTurret::AManualTurret()
     Stats.Range          = 6000.f;
 }
 
+void AManualTurret::BeginPlay()
+{
+    Super::BeginPlay();
+    FLinearColor Yellow(1.f, 0.85f, 0.f);
+    auto SetNeon = [&](UStaticMeshComponent* M) {
+        if (!M) return;
+        UMaterialInstanceDynamic* MID = M->CreateAndSetMaterialInstanceDynamic(0);
+        if (MID) { MID->SetVectorParameterValue(TEXT("BaseColor"), Yellow); MID->SetScalarParameterValue(TEXT("Glow"), 3.f); }
+    };
+    SetNeon(BaseMesh);
+    SetNeon(BarrelMesh);
+}
+
 void AManualTurret::SetPlayerBoarded(bool b)
 {
     bPlayerBoarded = b;
     if (b)
+    {
         TurretCamera->Activate();
+        if (BoardSound) UGameplayStatics::SpawnSoundAtLocation(this, BoardSound, GetActorLocation());
+    }
     else
     {
         TurretCamera->Deactivate();
         FireCooldown = 0.f;
+        if (UnboardSound) UGameplayStatics::SpawnSoundAtLocation(this, UnboardSound, GetActorLocation());
     }
 }
 
@@ -91,4 +118,5 @@ void AManualTurret::Fire()
         if (IDamageable* D = Cast<IDamageable>(Hit.GetActor()))
             D->TakeHit(Stats.AttackDamage, 99);
     }
+    if (FireSound) UGameplayStatics::SpawnSoundAtLocation(this, FireSound, GetActorLocation());
 }

@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "NeonTypes.h"
+#include "Sound/SoundBase.h"
 #include "AutoTurret.generated.h"
 
 class AMonster;
@@ -15,14 +16,18 @@ public:
 
     bool bEnabled = false;
 
+    UPROPERTY(EditAnywhere, Category="Audio") USoundBase* FireSound = nullptr;
+
     void SetEnabled(bool bEnable);
     void ApplyStats(const FTurretStats& InStats);
 
+    virtual void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;
 
 private:
-    UPROPERTY() UStaticMeshComponent* Mesh   = nullptr;
-    UPROPERTY() USceneComponent*      Barrel = nullptr;
+    UPROPERTY() UStaticMeshComponent*      Mesh = nullptr;
+    UPROPERTY() USceneComponent*          Barrel = nullptr;
+    UPROPERTY() UMaterialInstanceDynamic* MID    = nullptr;
     UPROPERTY() TWeakObjectPtr<AMonster> Target;
 
     FTurretStats Stats;

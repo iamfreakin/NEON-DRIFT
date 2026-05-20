@@ -1,6 +1,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Sound/SoundBase.h"
 #include "ResourceShard.generated.h"
 
 class APlayerShip;
@@ -13,9 +14,11 @@ public:
     AResourceShard();
 
     UPROPERTY() int32 Value = 1;
+    UPROPERTY(EditAnywhere, Category="Audio") USoundBase* CollectSound = nullptr;
 
     void AttractTo(APlayerShip* Ship);
 
+    virtual void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;
 
 private:

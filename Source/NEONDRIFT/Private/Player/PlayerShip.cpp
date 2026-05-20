@@ -5,10 +5,13 @@
 #include "NeonPlayerController.h"
 #include "ManualTurret.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/InstancedStaticMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Engine/StaticMesh.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Components/AudioComponent.h"
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
 #include "Kismet/GameplayStatics.h"
@@ -28,6 +31,17 @@ APlayerShip::APlayerShip()
         Mesh->SetStaticMesh(CubeMesh.Object);
     Mesh->SetWorldScale3D(FVector(2.f, 1.f, 0.4f));
 
+    static ConstructorHelpers::FObjectFinder<UMaterialInterface> NeonMat(TEXT("/Game/Materials/M_NeonBase.M_NeonBase"));
+    if (NeonMat.Succeeded())
+        Mesh->SetMaterial(0, NeonMat.Object);
+
+    TrailISMC = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Trail"));
+    TrailISMC->SetupAttachment(RootComponent);
+    TrailISMC->SetCollisionProfileName(TEXT("NoCollision"));
+    TrailISMC->SetCastShadow(false);
+    if (CubeMesh.Succeeded())  TrailISMC->SetStaticMesh(CubeMesh.Object);
+    if (NeonMat.Succeeded())   TrailISMC->SetMaterial(0, NeonMat.Object);
+
     SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
     SpringArm->SetupAttachment(RootComponent);
     SpringArm->TargetArmLength         = 900.f;
@@ -46,6 +60,10 @@ APlayerShip::APlayerShip()
     Muzzle->SetRelativeLocation(FVector(130.f, 0, 0));
 
     bUseControllerRotationYaw = false;
+
+    EngineAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("EngineAudio"));
+    EngineAudio->SetupAttachment(RootComponent);
+    EngineAudio->bAutoActivate = false;
 }
 
 void APlayerShip::BeginPlay()
@@ -54,6 +72,25 @@ void APlayerShip::BeginPlay()
     UNeonGameInstance* GI = Cast<UNeonGameInstance>(GetGameInstance());
     if (GI) ApplyStats(GI->GetShipStats());
     CurrentHP = Stats.MaxHP;
+
+    ShipMID = Mesh->CreateAndSetMaterialInstanceDynamic(0);
+    if (ShipMID)
+    {
+        ShipMID->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.f, 1.f, 1.f)); // Cyan
+        ShipMID->SetScalarParameterValue(TEXT("Glow"), 3.f);
+    }
+
+    if (UMaterialInstanceDynamic* TrailMID = TrailISMC->CreateAndSetMaterialInstanceDynamic(0))
+    {
+        TrailMID->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.f, 1.f, 1.f));
+        TrailMID->SetScalarParameterValue(TEXT("Glow"), 1.5f);
+    }
+
+    if (EngineSound)
+    {
+        EngineAudio->SetSound(EngineSound);
+        EngineAudio->Play();
+    }
 }
 
 void APlayerShip::ApplyStats(const FShipStats& InStats)
@@ -82,9 +119,45 @@ void APlayerShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
     EIC->BindAction(PC->IA_Ready,       ETriggerEvent::Started,   this, &APlayerShip::OnReady);
 }
 
+void APlayerShip::UpdateTrail(float DeltaTime)
+{
+    // Age + cull
+    for (int32 i = TrailAge.Num() - 1; i >= 0; i--)
+    {
+        TrailAge[i] += DeltaTime;
+        if (TrailAge[i] >= 0.4f)
+        {
+            TrailPos.RemoveAt(i);
+            TrailRot.RemoveAt(i);
+            TrailAge.RemoveAt(i);
+        }
+    }
+    // Sample
+    TrailSampleTimer += DeltaTime;
+    if (TrailSampleTimer >= 0.08f)
+    {
+        TrailSampleTimer = 0.f;
+        TrailPos.Insert(GetActorLocation(), 0);
+        TrailRot.Insert(GetActorQuat(),     0);
+        TrailAge.Insert(0.f,               0);
+        if (TrailPos.Num() > 10) { TrailPos.SetNum(10); TrailRot.SetNum(10); TrailAge.SetNum(10); }
+    }
+    // Rebuild ISMC
+    if (!TrailISMC) return;
+    TrailISMC->ClearInstances();
+    for (int32 i = 0; i < TrailPos.Num(); i++)
+    {
+        float Alpha = 1.f - TrailAge[i] / 0.4f;
+        FVector Scale = FVector(2.f, 1.f, 0.4f) * Alpha * 0.8f;
+        TrailISMC->AddInstanceWorldSpace(FTransform(TrailRot[i], TrailPos[i], Scale));
+    }
+}
+
 void APlayerShip::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    UpdateTrail(DeltaTime);
 
     // When boarded in turret: freeze ship, route fire to turret
     ANeonPlayerController* PC = Cast<ANeonPlayerController>(GetController());
@@ -134,9 +207,14 @@ void APlayerShip::Tick(float DeltaTime)
     FRotator TargetRot(TargetPitch, ControlRot.Yaw, TargetRoll);
     SetActorRotation(FMath::RInterpTo(GetActorRotation(), TargetRot, DeltaTime, 8.f));
 
-    // Dynamic FOV
+    // Dynamic FOV + engine audio pitch
     float SpeedFrac = FMath::Clamp(Speed / FMath::Max(1.f, Stats.MaxSpeed), 0.f, 1.f);
     Camera->FieldOfView = FMath::Lerp(70.f, 110.f, SpeedFrac);
+    if (EngineAudio && EngineAudio->IsPlaying())
+    {
+        EngineAudio->SetPitchMultiplier (FMath::Lerp(0.6f, 1.4f, SpeedFrac));
+        EngineAudio->SetVolumeMultiplier(FMath::Lerp(0.3f, 1.0f, SpeedFrac));
+    }
 
     // Aim muzzle along control rotation
     Muzzle->SetWorldRotation(ControlRot);
@@ -192,6 +270,7 @@ void APlayerShip::FireOnce()
     FVector End   = Start + Muzzle->GetForwardVector() * 8000.f;
 
     DrawDebugLine(GetWorld(), Start, End, FColor::Cyan, false, 0.05f, 0, 2.f);
+    if (FireSound) UGameplayStatics::SpawnSoundAtLocation(this, FireSound, Start);
 
     FHitResult Hit;
     FCollisionQueryParams Params;
@@ -219,6 +298,7 @@ void APlayerShip::CollectShards()
 void APlayerShip::TakeHit(float Damage, int32)
 {
     CurrentHP -= Damage;
+    if (HitSound) UGameplayStatics::SpawnSoundAtLocation(this, HitSound, GetActorLocation());
     if (CurrentHP <= 0.f)
     {
         ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));

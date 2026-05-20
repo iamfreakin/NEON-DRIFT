@@ -1,9 +1,12 @@
 #include "ResourceBlock.h"
 #include "ResourceShard.h"
+#include "NeonGameMode.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "Materials/MaterialInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 
 AResourceBlock::AResourceBlock()
@@ -16,6 +19,10 @@ AResourceBlock::AResourceBlock()
     if (CubeMesh.Succeeded())
         Mesh->SetStaticMesh(CubeMesh.Object);
 
+    static ConstructorHelpers::FObjectFinder<UMaterialInterface> NeonMat(TEXT("/Game/Materials/M_NeonBase.M_NeonBase"));
+    if (NeonMat.Succeeded())
+        Mesh->SetMaterial(0, NeonMat.Object);
+
     SetActorScale3D(FVector(1.5f));
 }
 
@@ -23,6 +30,7 @@ void AResourceBlock::InitFromDef(const FBlockDef& Def)
 {
     RequiredPower  = Def.RequiredPower;
     HP             = Def.HP;
+    MaxHP          = Def.HP;
     ShardMin       = Def.ShardMin;
     ShardMax       = Def.ShardMax;
     ShardValue     = Def.ShardValue;
@@ -38,15 +46,21 @@ void AResourceBlock::InitFromDef(const FBlockDef& Def)
 
 void AResourceBlock::TakeHit(float Damage, int32 AttackerPower)
 {
+    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
+
     if (AttackerPower < RequiredPower)
     {
         SpawnSpark();
-        return; // attack power gate
+        if (GM && GM->BlockHitSound)
+            UGameplayStatics::SpawnSoundAtLocation(this, GM->BlockHitSound, GetActorLocation());
+        return;
     }
 
     HP -= Damage;
     if (HP <= 0.f)
     {
+        if (GM && GM->BlockBreakSound)
+            UGameplayStatics::SpawnSoundAtLocation(this, GM->BlockBreakSound, GetActorLocation());
         DropShards();
         Destroy();
     }
