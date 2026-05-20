@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Camera/CameraShakeBase.h"
+#include "Sound/SoundBase.h"
 #include "NeonTypes.h"
 #include "NeonBase.generated.h"
 
@@ -16,6 +17,11 @@ public:
 
     UPROPERTY(EditAnywhere) float MaxHP = 5.f;
     UPROPERTY(EditAnywhere) TSubclassOf<UCameraShakeBase> HitShakeClass;
+    UPROPERTY(EditAnywhere, Category="Audio") USoundBase* HitSound     = nullptr;
+    UPROPERTY(EditAnywhere, Category="Audio") USoundBase* DestroySound = nullptr;
+    UPROPERTY(EditAnywhere, Category="Audio") USoundBase* LowHPSound   = nullptr;
+
+    bool bLowHPSoundPlayed = false;
 
     UPROPERTY() ANeonGameMode* GameModeRef = nullptr;
 

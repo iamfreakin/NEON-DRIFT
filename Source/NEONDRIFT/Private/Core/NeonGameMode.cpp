@@ -37,6 +37,9 @@ void ANeonGameMode::BeginPlay()
     RefreshAutoTurrets();
     SpawnResourceField();
     EnterPhase(EGamePhase::PreWave);
+
+    if (BGMSound)          UGameplayStatics::SpawnSound2D(this, BGMSound);
+    if (RainAmbienceSound) UGameplayStatics::SpawnSound2D(this, RainAmbienceSound);
 }
 
 void ANeonGameMode::Tick(float DeltaSeconds)
@@ -87,9 +90,11 @@ void ANeonGameMode::EnterPhase(EGamePhase NewPhase)
         AliveMonsters        = 0;
         SpawnedThisWave      = 0;
         SpawnAccum           = 0.f;
+        if (WaveStartSound) UGameplayStatics::PlaySound2D(this, WaveStartSound);
         break;
     }
     case EGamePhase::Shop:
+        if (WaveClearSound) UGameplayStatics::PlaySound2D(this, WaveClearSound);
         if (ManualTurret) ManualTurret->SetPlayerBoarded(false);
         if (ANeonPlayerController* PC = Cast<ANeonPlayerController>(
                 UGameplayStatics::GetPlayerController(GetWorld(), 0)))
@@ -118,22 +123,31 @@ void ANeonGameMode::RequestStartWave()
     else if (Phase == EGamePhase::Gather)  EnterPhase(EGamePhase::Combat);
 }
 
-void ANeonGameMode::AddResources(int32 Amount) { Resources += Amount; }
+void ANeonGameMode::AddResources(int32 Amount)
+{
+    Resources += Amount;
+    if (ShardCollectSound) UGameplayStatics::PlaySound2D(this, ShardCollectSound);
+}
 
 void ANeonGameMode::OnMonsterKilled()
 {
     AliveMonsters = FMath::Max(0, AliveMonsters - 1);
+    if (MonsterDeathSound) UGameplayStatics::PlaySound2D(this, MonsterDeathSound);
 }
 
 void ANeonGameMode::OnBaseDestroyed()
 {
+    if (GameOverSound) UGameplayStatics::PlaySound2D(this, GameOverSound);
     EnterPhase(EGamePhase::GameOver);
 }
 
 void ANeonGameMode::OnWaveCleared()
 {
     if (WaveIndex >= WaveTable.Num() - 1)
+    {
+        if (VictorySound) UGameplayStatics::PlaySound2D(this, VictorySound);
         EnterPhase(EGamePhase::Victory);
+    }
     else
         EnterPhase(EGamePhase::Shop);
 }
@@ -146,7 +160,12 @@ void ANeonGameMode::ApplyUpgrade(EUpgradeId Id)
     UNeonGameInstance* GI = Cast<UNeonGameInstance>(GetGameInstance());
     if (!GI) return;
 
-    if (!GI->TryPurchase(Id, Resources, Def->Cost, Def->MaxLevel)) return;
+    if (!GI->TryPurchase(Id, Resources, Def->Cost, Def->MaxLevel))
+    {
+        if (ShopFailSound) UGameplayStatics::PlaySound2D(this, ShopFailSound);
+        return;
+    }
+    if (ShopBuySound) UGameplayStatics::PlaySound2D(this, ShopBuySound);
 
     // Apply to live actors
     if (APlayerShip* Ship = Cast<APlayerShip>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))
@@ -307,9 +326,9 @@ void ANeonGameMode::InitDefaultTables()
             D.HP=HP; D.ShardMin=SMin; D.ShardMax=SMax; D.ShardValue=SVal; D.SpawnWeight=W;
             return D;
         };
-        BlockTable.Add(MB(EBlockType::Gold,    FLinearColor(1.f,0.5f,0.f),   1, 3.f,  5,  8, 1, 6.f));
-        BlockTable.Add(MB(EBlockType::Iron,    FLinearColor(0.f,1.f,1.f),    2, 5.f,  3,  5, 1, 3.f));
-        BlockTable.Add(MB(EBlockType::Diamond, FLinearColor(1.f,1.f,1.f),    3, 8.f, 10, 15, 2, 1.f));
+        BlockTable.Add(MB(EBlockType::Gold,    FLinearColor(1.f,0.5f,0.f),   1,  5.f,  5,  8, 1, 6.f));
+        BlockTable.Add(MB(EBlockType::Iron,    FLinearColor(0.f,1.f,1.f),    2,  8.f,  3,  5, 1, 3.f));
+        BlockTable.Add(MB(EBlockType::Diamond, FLinearColor(1.f,1.f,1.f),    3, 12.f, 10, 15, 2, 1.f));
     }
 
     if (UpgradeTable.Num() == 0)

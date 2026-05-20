@@ -116,6 +116,8 @@ void ANeonPlayerController::Tick(float DeltaSeconds)
 void ANeonPlayerController::OnShopUp()
 {
     ShopCursorIndex = FMath::Max(0, ShopCursorIndex - 1);
+    if (ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this)))
+        if (GM->ShopNavigateSound) UGameplayStatics::PlaySound2D(this, GM->ShopNavigateSound);
 }
 
 void ANeonPlayerController::OnShopDown()
@@ -123,6 +125,7 @@ void ANeonPlayerController::OnShopDown()
     ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
     int32 Max = GM ? GM->UpgradeTable.Num() - 1 : 0;
     ShopCursorIndex = FMath::Min(Max, ShopCursorIndex + 1);
+    if (GM && GM->ShopNavigateSound) UGameplayStatics::PlaySound2D(this, GM->ShopNavigateSound);
 }
 
 void ANeonPlayerController::OnShopConfirm()

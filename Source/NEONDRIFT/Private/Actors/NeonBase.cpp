@@ -18,7 +18,7 @@ ABase::ABase()
     if (CubeMesh.Succeeded())
         Mesh->SetStaticMesh(CubeMesh.Object);
 
-    static ConstructorHelpers::FObjectFinder<UMaterial> NeonMat(TEXT("/Game/Materials/M_NeonBase.M_NeonBase"));
+    static ConstructorHelpers::FObjectFinder<UMaterialInterface> NeonMat(TEXT("/Game/Materials/M_NeonBase.M_NeonBase"));
     if (NeonMat.Succeeded())
         Mesh->SetMaterial(0, NeonMat.Object);
 
@@ -65,10 +65,21 @@ void ABase::TakeHit(float Damage, int32 /*AttackerPower*/)
     CurrentHP = FMath::Max(0.f, CurrentHP - Damage);
     HitFlashTimer = 1.f;
 
+    if (HitSound) UGameplayStatics::SpawnSoundAtLocation(this, HitSound, GetActorLocation());
     if (HitShakeClass)
         if (APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0))
             PC->ClientStartCameraShake(HitShakeClass, 0.1f);
 
+    // 25% HP 경고음 (1회)
+    if (!bLowHPSoundPlayed && GetHPFraction() <= 0.25f && CurrentHP > 0.f)
+    {
+        bLowHPSoundPlayed = true;
+        if (LowHPSound) UGameplayStatics::PlaySound2D(this, LowHPSound);
+    }
+
     if (CurrentHP <= 0.f && GameModeRef)
+    {
+        if (DestroySound) UGameplayStatics::SpawnSoundAtLocation(this, DestroySound, GetActorLocation());
         GameModeRef->OnBaseDestroyed();
+    }
 }

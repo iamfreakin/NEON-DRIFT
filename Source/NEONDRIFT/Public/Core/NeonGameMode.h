@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "NeonTypes.h"
+#include "Sound/SoundBase.h"
 #include "NeonGameMode.generated.h"
 
 class ABase;
@@ -27,6 +28,22 @@ public:
     int32      AliveMonsters        = 0;
     int32      SpawnedThisWave      = 0;
     int32      TotalMonstersThisWave= 0;
+
+    // ---- Audio ----
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* WaveStartSound    = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* WaveClearSound    = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* VictorySound      = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* GameOverSound     = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* ShopBuySound      = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* ShopNavigateSound = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* ShopFailSound     = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* MonsterDeathSound = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* MonsterAttackSound= nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* ShardCollectSound = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* BlockHitSound     = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* BlockBreakSound   = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* BGMSound          = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* RainAmbienceSound = nullptr;
 
     // ---- Data tables ----
     UPROPERTY(EditDefaultsOnly, Category="WaveData")   TArray<FWaveDef>    WaveTable;
