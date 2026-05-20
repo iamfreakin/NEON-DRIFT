@@ -10,6 +10,17 @@ public class NEONDRIFT : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
 
+		PublicIncludePaths.AddRange(new string[] { 
+			"NEONDRIFT/Public",
+			"NEONDRIFT/Public/Core",
+			"NEONDRIFT/Public/Actors",
+			"NEONDRIFT/Public/Enemies",
+			"NEONDRIFT/Public/Player",
+			"NEONDRIFT/Public/Turrets",
+			"NEONDRIFT/Public/Items",
+			"NEONDRIFT/Public/UI"
+		});
+
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
 		// Uncomment if you are using Slate UI
