@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "NeonTypes.h"
+#include "Components/StaticMeshComponent.h"
 #include "ManualTurret.generated.h"
 
 class UCameraComponent;

@@ -20,8 +20,8 @@ ANeonPlayerController::ANeonPlayerController()
 
 // Helper: create a 1D Axis action and add W/positive + S/negative key mappings
 static UInputAction* Make1DAction(UObject* Outer, UInputMappingContext* IMC,
-                                   FKey PosKey, FKey NegKey,
-                                   const TCHAR* Name)
+                                    FKey PosKey, FKey NegKey,
+                                    const TCHAR* Name)
 {
     UInputAction* IA = NewObject<UInputAction>(Outer, Name);
     IA->ValueType = EInputActionValueType::Axis1D;
@@ -36,7 +36,7 @@ static UInputAction* Make1DAction(UObject* Outer, UInputMappingContext* IMC,
 }
 
 static UInputAction* MakeBoolAction(UObject* Outer, UInputMappingContext* IMC,
-                                     FKey Key, const TCHAR* Name)
+                                        FKey Key, const TCHAR* Name)
 {
     UInputAction* IA = NewObject<UInputAction>(Outer, Name);
     IA->ValueType = EInputActionValueType::Boolean;

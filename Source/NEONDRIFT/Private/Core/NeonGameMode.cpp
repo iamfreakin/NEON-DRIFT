@@ -91,8 +91,16 @@ void ANeonGameMode::EnterPhase(EGamePhase NewPhase)
     }
     case EGamePhase::Shop:
         if (ManualTurret) ManualTurret->SetPlayerBoarded(false);
-        Cast<ANeonPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))
-            ->ShopCursorIndex = 0;
+        if (ANeonPlayerController* PC = Cast<ANeonPlayerController>(
+                UGameplayStatics::GetPlayerController(GetWorld(), 0)))
+        {
+            if (PC->BoardedTurret)
+            {
+                PC->BoardedTurret = nullptr;
+                PC->SetViewTargetWithBlend(PC->GetPawn(), 0.25f);
+            }
+            PC->ShopCursorIndex = 0;
+        }
         break;
 
     case EGamePhase::GameOver:
@@ -258,9 +266,8 @@ void ANeonGameMode::SpawnResourceField()
         float Angle  = FMath::FRandRange(0.f, 2.f * PI);
         float Radius = FMath::FRandRange(BlockSpawnMinRadius, BlockSpawnRadius);
         float Z      = Center.Z + BlockSpawnHeight + FMath::FRandRange(0.f, 300.f);
-        FVector Loc  = FVector(Center.X + FMath::Cos(Angle) * Radius,
-                               Center.Y + FMath::Sin(Angle) * Radius,
-                               Z);
+        FVector Loc  = FVector(Center.X + FMath::Cos(Angle) * Radius, 
+                                Center.Y + FMath::Sin(Angle) * Radius, Z);
 
         AResourceBlock* Block = GetWorld()->SpawnActor<AResourceBlock>(
             AResourceBlock::StaticClass(), Loc, FRotator::ZeroRotator);
@@ -294,7 +301,7 @@ void ANeonGameMode::InitDefaultTables()
     if (BlockTable.Num() == 0)
     {
         auto MB = [](EBlockType T, FLinearColor C, int32 Pwr, float HP,
-                     int32 SMin, int32 SMax, int32 SVal, float W) -> FBlockDef
+                        int32 SMin, int32 SMax, int32 SVal, float W) -> FBlockDef
         {
             FBlockDef D; D.Type=T; D.EmissiveColor=C; D.RequiredPower=Pwr;
             D.HP=HP; D.ShardMin=SMin; D.ShardMax=SMax; D.ShardValue=SVal; D.SpawnWeight=W;
