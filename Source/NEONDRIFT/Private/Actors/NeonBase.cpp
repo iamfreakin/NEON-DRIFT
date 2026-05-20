@@ -18,8 +18,12 @@ ABase::ABase()
     if (CubeMesh.Succeeded())
         Mesh->SetStaticMesh(CubeMesh.Object);
 
-    Mesh->SetWorldScale3D(FVector(1.0f)); // 100uu = 1m cube, scaled to 10m in Tick or via Details
-    SetActorScale3D(FVector(10.f)); // 10m x 10m x 10m
+    static ConstructorHelpers::FObjectFinder<UMaterial> NeonMat(TEXT("/Game/Materials/M_NeonBase.M_NeonBase"));
+    if (NeonMat.Succeeded())
+        Mesh->SetMaterial(0, NeonMat.Object);
+
+    Mesh->SetWorldScale3D(FVector(1.0f));
+    SetActorScale3D(FVector(10.f));
 }
 
 void ABase::BeginPlay()
