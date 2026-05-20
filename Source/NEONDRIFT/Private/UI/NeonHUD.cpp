@@ -3,6 +3,7 @@
 #include "NeonGameInstance.h"
 #include "NeonBase.h"
 #include "NeonPlayerController.h"
+#include "ManualTurret.h"
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
 #include "Kismet/GameplayStatics.h"
@@ -29,6 +30,29 @@ void ANeonHUD::DrawHUD()
 
     float W = Canvas->SizeX;
     float H = Canvas->SizeY;
+
+    // Turret HUD: large crosshair (camera/aim) + small dot (barrel position)
+    ANeonPlayerController* PC = Cast<ANeonPlayerController>(GetOwningPlayerController());
+    if (PC && PC->BoardedTurret)
+    {
+        float CX = W * 0.5f, CY = H * 0.5f, Len = 16.f, Gap = 4.f;
+
+        // Large crosshair = where camera is looking (fixed at screen center)
+        DrawLine(CX - Len, CY, CX - Gap, CY, ColWhite, 1.5f);
+        DrawLine(CX + Gap, CY, CX + Len, CY, ColWhite, 1.5f);
+        DrawLine(CX, CY - Len, CX, CY - Gap, ColWhite, 1.5f);
+        DrawLine(CX, CY + Gap, CX, CY + Len, ColWhite, 1.5f);
+
+        // Small dot = where barrel is actually pointing (same origin as Fire())
+        FVector BarrelTip = GetOwningPlayerController()->PlayerCameraManager->GetCameraLocation()
+                          + PC->BoardedTurret->GetBarrelForward() * 8000.f;
+        FVector2D DotScreen;
+        if (GetOwningPlayerController()->ProjectWorldLocationToScreen(BarrelTip, DotScreen))
+        {
+            float S = 5.f;
+            DrawRect(FLinearColor(1.f, 0.7f, 0.f, 1.f), DotScreen.X - S, DotScreen.Y - S, S * 2.f, S * 2.f);
+        }
+    }
 
     DrawResources(20.f, 20.f);
     DrawBaseHP(W - 250.f, 20.f);
