@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__unreal__load_toolset",
+      "Read(//mnt/c/Program Files/**)",
+      "Read(//c/Program Files/Epic Games/**)",
+      "Bash(\"/mnt/c/Program Files/Epic Games/UE_5.8/Engine/Build/BatchFiles/Build.bat\" NEONDRIFT Win64 Development \"/mnt/c/Users/user/Documents/Unreal Projects/NEONDRIFT/NEONDRIFT.uproject\" -waitmutex)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -Last 30)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -Last 20)",
+      "mcp__unreal__list_toolsets",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -Last 12)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -Last 10)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -Last 8)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -Last 6)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\Source\\\\NEONDRIFT\\\\Public\\\\Actors\\\\NeonHitShake.h\" -Force)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\Source\\\\NEONDRIFT\\\\Private\\\\Actors\\\\NeonHitShake.cpp\" -Force)"
+    ]
+  }
+}
