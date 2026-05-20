@@ -25,6 +25,9 @@ Docs/
 .idea/
 *.DotSettings.user
 
+# Claude Code AI 툴링 메타데이터
+.claude/
+
 # 컴파일된 에셋 캐시
 *.uplugin.old
 FileOpenOrder/
