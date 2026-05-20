@@ -1,23 +1,24 @@
 #include "NeonHUD.h"
-#include "NeonGameMode.h"
-#include "NeonGameInstance.h"
-#include "NeonBase.h"
+#include "NeonHUDWidget.h"
 #include "NeonPlayerController.h"
 #include "ManualTurret.h"
 #include "Engine/Canvas.h"
-#include "Engine/Engine.h"
-#include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
 
-static const FLinearColor ColWhite  (1.f, 1.f, 1.f, 1.f);
-static const FLinearColor ColCyan   (0.f, 1.f, 1.f, 1.f);
-static const FLinearColor ColOrange (1.f, 0.5f, 0.f, 1.f);
-static const FLinearColor ColRed    (1.f, 0.2f, 0.2f, 1.f);
-static const FLinearColor ColGreen  (0.2f, 1.f, 0.2f, 1.f);
-static const FLinearColor ColGray   (0.5f, 0.5f, 0.5f, 0.5f);
-
-UFont* ANeonHUD::GetFont() const
+void ANeonHUD::BeginPlay()
 {
-    return GEngine ? GEngine->GetMediumFont() : nullptr;
+    Super::BeginPlay();
+
+    APlayerController* PC = GetOwningPlayerController();
+    if (!PC) return;
+
+    HUDWidget = CreateWidget<UNeonHUDWidget>(PC, UNeonHUDWidget::StaticClass());
+    if (!HUDWidget) return;
+
+    HUDWidget->AddToViewport();
+
+    // Prevent UMG from capturing keyboard input (Enter, arrows, etc.)
+    PC->SetInputMode(FInputModeGameOnly());
 }
 
 void ANeonHUD::DrawHUD()
@@ -25,147 +26,24 @@ void ANeonHUD::DrawHUD()
     Super::DrawHUD();
     if (!Canvas) return;
 
-    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
-    if (!GM) return;
-
-    float W = Canvas->SizeX;
-    float H = Canvas->SizeY;
-
-    // Turret HUD: large crosshair (camera/aim) + small dot (barrel position)
+    // Turret dual-crosshair — kept on Canvas because barrel dot needs world→screen projection
     ANeonPlayerController* PC = Cast<ANeonPlayerController>(GetOwningPlayerController());
-    if (PC && PC->BoardedTurret)
+    if (!PC || !PC->BoardedTurret) return;
+
+    const float CX = Canvas->SizeX * 0.5f, CY = Canvas->SizeY * 0.5f;
+    constexpr float Len = 16.f, Gap = 4.f;
+
+    DrawLine(CX - Len, CY, CX - Gap, CY, FLinearColor::White, 1.5f);
+    DrawLine(CX + Gap, CY, CX + Len, CY, FLinearColor::White, 1.5f);
+    DrawLine(CX, CY - Len, CX, CY - Gap, FLinearColor::White, 1.5f);
+    DrawLine(CX, CY + Gap, CX, CY + Len, FLinearColor::White, 1.5f);
+
+    FVector BarrelTip = PC->PlayerCameraManager->GetCameraLocation()
+                      + PC->BoardedTurret->GetBarrelForward() * 8000.f;
+    FVector2D DotScreen;
+    if (PC->ProjectWorldLocationToScreen(BarrelTip, DotScreen))
     {
-        float CX = W * 0.5f, CY = H * 0.5f, Len = 16.f, Gap = 4.f;
-
-        // Large crosshair = where camera is looking (fixed at screen center)
-        DrawLine(CX - Len, CY, CX - Gap, CY, ColWhite, 1.5f);
-        DrawLine(CX + Gap, CY, CX + Len, CY, ColWhite, 1.5f);
-        DrawLine(CX, CY - Len, CX, CY - Gap, ColWhite, 1.5f);
-        DrawLine(CX, CY + Gap, CX, CY + Len, ColWhite, 1.5f);
-
-        // Small dot = where barrel is actually pointing (same origin as Fire())
-        FVector BarrelTip = GetOwningPlayerController()->PlayerCameraManager->GetCameraLocation()
-                          + PC->BoardedTurret->GetBarrelForward() * 8000.f;
-        FVector2D DotScreen;
-        if (GetOwningPlayerController()->ProjectWorldLocationToScreen(BarrelTip, DotScreen))
-        {
-            float S = 5.f;
-            DrawRect(FLinearColor(1.f, 0.7f, 0.f, 1.f), DotScreen.X - S, DotScreen.Y - S, S * 2.f, S * 2.f);
-        }
+        constexpr float S = 5.f;
+        DrawRect(FLinearColor(1.f, 0.7f, 0.f, 1.f), DotScreen.X - S, DotScreen.Y - S, S * 2.f, S * 2.f);
     }
-
-    DrawResources(20.f, 20.f);
-    DrawBaseHP(W - 250.f, 20.f);
-
-    // Wave label (top center)
-    FString WaveStr = FString::Printf(TEXT("Wave %d / %d"), GM->WaveIndex + 1, GM->WaveTable.Num());
-    DrawText(WaveStr, ColCyan, W * 0.5f - 60.f, 20.f, GetFont(), 1.2f, false);
-
-    DrawPhaseInfo(W * 0.5f, H * 0.5f);
-
-    if (GM->Phase == EGamePhase::Shop)
-        DrawShopMenu(W * 0.5f, H * 0.4f);
-}
-
-void ANeonHUD::DrawResources(float X, float Y)
-{
-    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
-    if (!GM) return;
-
-    FString Str = FString::Printf(TEXT("Resources: %d"), GM->Resources);
-    DrawText(Str, ColOrange, X, Y, GetFont(), 1.f, false);
-}
-
-void ANeonHUD::DrawBaseHP(float X, float Y)
-{
-    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
-    ABase*         B  = GM ? GM->Base : nullptr;
-    if (!B) return;
-
-    float Frac = B->GetHPFraction();
-    float BarW = 200.f, BarH = 20.f;
-
-    // Background
-    DrawRect(ColGray, X, Y, BarW, BarH);
-    // Fill
-    FLinearColor Fill = Frac > 0.25f ? ColGreen : ColRed;
-    DrawRect(Fill, X, Y, BarW * Frac, BarH);
-    // Label
-    FString HPStr = FString::Printf(TEXT("Base HP: %.0f / %.0f"), B->CurrentHP, B->MaxHP);
-    DrawText(HPStr, ColWhite, X, Y + BarH + 4.f, GetFont(), 0.85f, false);
-}
-
-void ANeonHUD::DrawPhaseInfo(float CX, float CY)
-{
-    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
-    if (!GM) return;
-
-    switch (GM->Phase)
-    {
-    case EGamePhase::PreWave:
-    {
-        FString S = FString::Printf(TEXT("Wave %d — Press [F] to start gathering"), GM->WaveIndex + 1);
-        DrawText(S, ColCyan, CX - 200.f, CY - 14.f, GetFont(), 1.1f, false);
-        break;
-    }
-    case EGamePhase::Gather:
-    {
-        FString S = FString::Printf(TEXT("Gather Resources! [F] Ready    %.0fs left"), GM->GatherTimer);
-        DrawText(S, ColOrange, CX - 240.f, CY - 14.f, GetFont(), 1.f, false);
-        break;
-    }
-    case EGamePhase::Combat:
-    {
-        int32 Remaining = GM->TotalMonstersThisWave - GM->SpawnedThisWave + GM->AliveMonsters;
-        FString S = FString::Printf(TEXT("Enemies remaining: %d"), FMath::Max(0, Remaining));
-        DrawText(S, ColRed, CX - 100.f, 60.f, GetFont(), 1.f, false);
-        break;
-    }
-    case EGamePhase::GameOver:
-        DrawText(TEXT("GAME OVER"), ColRed, CX - 100.f, CY - 30.f, GetFont(), 2.5f, false);
-        DrawText(TEXT("[R] Restart"), ColWhite, CX - 60.f, CY + 40.f, GetFont(), 1.f, false);
-        break;
-
-    case EGamePhase::Victory:
-        DrawText(TEXT("VICTORY!"), ColCyan, CX - 90.f, CY - 30.f, GetFont(), 2.5f, false);
-        DrawText(TEXT("[R] Restart"), ColWhite, CX - 60.f, CY + 40.f, GetFont(), 1.f, false);
-        break;
-
-    default: break;
-    }
-}
-
-void ANeonHUD::DrawShopMenu(float CX, float CY)
-{
-    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
-    ANeonPlayerController* PC = Cast<ANeonPlayerController>(GetOwningPlayerController());
-    if (!GM || !PC) return;
-
-    UNeonGameInstance* GI = Cast<UNeonGameInstance>(GetGameInstance());
-
-    DrawText(TEXT("=== UPGRADE SHOP ==="), ColCyan, CX - 130.f, CY - 30.f, GetFont(), 1.2f, false);
-    DrawText(FString::Printf(TEXT("Resources: %d"), GM->Resources), ColOrange, CX - 60.f, CY - 8.f, GetFont(), 1.f, false);
-
-    float ItemY = CY + 20.f;
-    float ItemH = 22.f;
-    for (int32 i = 0; i < GM->UpgradeTable.Num(); i++)
-    {
-        const FUpgradeDef& U = GM->UpgradeTable[i];
-        int32 CurLvl  = GI ? GI->Upgrades.GetLevel(U.Id) : 0;
-        bool  MaxedOut = CurLvl >= U.MaxLevel;
-        bool  Selected = (i == PC->ShopCursorIndex);
-        bool  Afford   = (GM->Resources >= U.Cost);
-
-        FLinearColor Col = MaxedOut ? ColGray : (Afford ? ColWhite : ColRed);
-        if (Selected) Col = ColOrange;
-
-        FString Line = FString::Printf(TEXT("%s  [%s]  Lv%d/%d  Cost:%d"),
-            *U.DisplayName, *U.EffectDesc, CurLvl, U.MaxLevel, U.Cost);
-
-        if (Selected) DrawRect(FLinearColor(0.2f, 0.2f, 0.f, 0.4f), CX - 230.f, ItemY - 2.f, 460.f, ItemH);
-        DrawText(Line, Col, CX - 220.f, ItemY, GetFont(), 0.9f, false);
-        ItemY += ItemH;
-    }
-
-    DrawText(TEXT("[Up/Down] Select   [Enter] Buy   [Tab] Next Wave"), ColGray, CX - 220.f, ItemY + 10.f, GetFont(), 0.85f, false);
 }
