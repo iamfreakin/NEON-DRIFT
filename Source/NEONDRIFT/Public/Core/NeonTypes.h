@@ -40,9 +40,9 @@ struct FShipStats
     UPROPERTY(EditAnywhere) int32 AttackPower   = 1;
     UPROPERTY(EditAnywhere) float FireRate      = 10.f;    // shots/sec
     UPROPERTY(EditAnywhere) float MagnetRadius  = 200.f;   // uu (2m)
-    UPROPERTY(EditAnywhere) float MaxSpeed      = 4000.f;  // uu/s
+    UPROPERTY(EditAnywhere) float MaxSpeed      = 2000.f;  // uu/s
     UPROPERTY(EditAnywhere) float MaxHP         = 3.f;
-    UPROPERTY(EditAnywhere) float Acceleration  = 12000.f;
+    UPROPERTY(EditAnywhere) float Acceleration  = 5000.f;
     UPROPERTY(EditAnywhere) float LinearDrag    = 2.f;     // 1/sec drag coefficient
 };
 

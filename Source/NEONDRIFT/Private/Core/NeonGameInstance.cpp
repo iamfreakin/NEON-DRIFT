@@ -23,9 +23,9 @@ FShipStats UNeonGameInstance::GetShipStats() const
     S.AttackPower  = 1   + Atk;
     S.FireRate     = 10.f;
     S.MagnetRadius = 500.f + Upgrades.GetLevel(EUpgradeId::Ship_Magnet)  * 100.f;
-    S.MaxSpeed     = 4000.f + Upgrades.GetLevel(EUpgradeId::Ship_Speed)  * 1000.f;
+    S.MaxSpeed     = 2000.f + Upgrades.GetLevel(EUpgradeId::Ship_Speed)  * 500.f;
     S.MaxHP        = 3.f   + Upgrades.GetLevel(EUpgradeId::Ship_HP)     * 2.f;
-    S.Acceleration = 12000.f;
+    S.Acceleration = 5000.f;
     S.LinearDrag   = 2.f;
     return S;
 }

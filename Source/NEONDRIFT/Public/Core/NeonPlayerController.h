@@ -32,6 +32,7 @@ public:
 
     UPROPERTY() AManualTurret* BoardedTurret = nullptr;
 
+    virtual void BeginPlay() override;
     virtual void SetupInputComponent() override;
     virtual void Tick(float DeltaSeconds) override;
 

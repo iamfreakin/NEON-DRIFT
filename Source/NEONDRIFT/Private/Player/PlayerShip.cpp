@@ -128,9 +128,10 @@ void APlayerShip::Tick(float DeltaTime)
 
     AddActorWorldOffset(Velocity * DeltaTime, true);
 
-    // Ship yaw follows controller (camera direction), roll leans on strafe for visual flair
+    // Ship follows camera yaw, tilts on strafe (roll) and look pitch (clamped)
     float TargetRoll  = MoveRightInput * 18.f;
-    FRotator TargetRot(0.f, ControlRot.Yaw, TargetRoll);
+    float TargetPitch = FMath::Clamp(FRotator::NormalizeAxis(ControlRot.Pitch), -25.f, 25.f);
+    FRotator TargetRot(TargetPitch, ControlRot.Yaw, TargetRoll);
     SetActorRotation(FMath::RInterpTo(GetActorRotation(), TargetRot, DeltaTime, 8.f));
 
     // Dynamic FOV
@@ -164,8 +165,8 @@ void APlayerShip::OnThrust     (const FInputActionValue& Value)
 void APlayerShip::OnLook(const FInputActionValue& Value)
 {
     FVector2D Delta = Value.Get<FVector2D>();
-    AddControllerYawInput  ( Delta.X * 0.15f);
-    AddControllerPitchInput(-Delta.Y * 0.15f);
+    AddControllerYawInput  ( Delta.X * 0.09f);
+    AddControllerPitchInput(-Delta.Y * 0.09f);
 }
 
 void APlayerShip::StartFire(const FInputActionValue&) { bFiring = true;  FireCooldown = 0.f; }

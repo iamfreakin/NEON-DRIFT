@@ -73,6 +73,17 @@ void ANeonPlayerController::BuildIMC()
     }
 }
 
+void ANeonPlayerController::BeginPlay()
+{
+    Super::BeginPlay();
+    // Limit vertical look range — prevents disorienting straight-up/down views
+    if (PlayerCameraManager)
+    {
+        PlayerCameraManager->ViewPitchMin = -60.f;
+        PlayerCameraManager->ViewPitchMax = 60.f;
+    }
+}
+
 void ANeonPlayerController::SetupInputComponent()
 {
     Super::SetupInputComponent(); // Creates InputComponent
