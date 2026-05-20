@@ -1,6 +1,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Camera/CameraShakeBase.h"
 #include "NeonTypes.h"
 #include "NeonBase.generated.h"
 
@@ -14,6 +15,7 @@ public:
     ABase();
 
     UPROPERTY(EditAnywhere) float MaxHP = 5.f;
+    UPROPERTY(EditAnywhere) TSubclassOf<UCameraShakeBase> HitShakeClass;
 
     UPROPERTY() ANeonGameMode* GameModeRef = nullptr;
 
