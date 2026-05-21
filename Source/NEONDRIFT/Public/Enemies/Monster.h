@@ -25,6 +25,11 @@ public:
     UPROPERTY() TWeakObjectPtr<ABase>         BaseRef;
     UPROPERTY() TWeakObjectPtr<ANeonGameMode> GameModeRef;
 
+    FVector TargetOffset = FVector::ZeroVector; // A: 진입각 오프셋
+    float   WanderPhase  = 0.f;
+    float   WanderFreq   = 1.f;
+    float   WanderTime   = 0.f;
+
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;
     virtual void TakeHit(float Damage, int32 AttackerPower) override;

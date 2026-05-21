@@ -246,6 +246,18 @@ void ANeonGameMode::SpawnMonsterAtEntrance(int32 EntranceIdx)
     M->TargetLoc = Base ? Base->GetActorLocation() : FVector::ZeroVector;
     M->BaseRef   = Base;
     M->GameModeRef = this;
+
+    // A: 진입각 오프셋 — 스폰→기지 방향의 수직벡터로 랜덤 편향
+    if (Base)
+    {
+        FVector ToBase = (Base->GetActorLocation() - Loc).GetSafeNormal();
+        FVector Perp   = FVector::CrossProduct(ToBase, FVector::UpVector).GetSafeNormal();
+        M->TargetOffset = Perp * FMath::FRandRange(-1500.f, 1500.f);
+    }
+    // B: 사인파 파라미터 랜덤화
+    M->WanderPhase = FMath::FRandRange(0.f, 2.f * PI);
+    M->WanderFreq  = FMath::FRandRange(0.6f, 1.4f);
+
     AliveMonsters++;
 }
 
@@ -296,7 +308,7 @@ void ANeonGameMode::SpawnResourceField()
             if (Roll <= Acc) { Chosen = &BD; break; }
         }
 
-        // Random ring position - area-uniform radius so blocks don't cluster at inner ring
+        // Random ring position — area-uniform radius so blocks don't cluster at inner ring
         float Angle  = FMath::FRandRange(0.f, 2.f * PI);
         float MinR2  = BlockSpawnMinRadius * BlockSpawnMinRadius;
         float MaxR2  = BlockSpawnRadius    * BlockSpawnRadius;

@@ -73,7 +73,17 @@ void AMonster::Tick(float DeltaTime)
     else
     {
         bAttacking = false;
-        FVector Dir = (Base->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+
+        // A: 기지 근처에서는 직선 진입, 멀면 오프셋 목표로 비스듬히 접근
+        FVector BaseLoc    = Base->GetActorLocation();
+        FVector MoveTarget = (DistToBase > AttackRange * 1.5f) ? BaseLoc + TargetOffset : BaseLoc;
+        FVector Dir        = (MoveTarget - GetActorLocation()).GetSafeNormal();
+
+        // B: 횡방향 사인파 흔들림
+        WanderTime += DeltaTime;
+        FVector Lateral = FVector::CrossProduct(FVector::UpVector, Dir).GetSafeNormal();
+        Dir = (Dir + Lateral * FMath::Sin(WanderTime * WanderFreq + WanderPhase) * 0.4f).GetSafeNormal();
+
         AddActorWorldOffset(Dir * MoveSpeed * DeltaTime, true);
     }
 }
