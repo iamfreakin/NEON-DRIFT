@@ -80,7 +80,7 @@ void ANeonGameMode::EnterPhase(EGamePhase NewPhase)
         break;
 
     case EGamePhase::Gather:
-        GatherTimer = 60.f;
+        GatherTimer = 40.f;
         // Destroy leftover blocks, respawn field
         for (TActorIterator<AResourceBlock> It(GetWorld()); It; ++It) It->Destroy();
         SpawnResourceField();
@@ -258,6 +258,14 @@ void ANeonGameMode::SpawnMonsterAtEntrance(int32 EntranceIdx)
     M->WanderPhase = FMath::FRandRange(0.f, 2.f * PI);
     M->WanderFreq  = FMath::FRandRange(0.6f, 1.4f);
 
+    // 비행형: 웨이브 2부터 30% 확률, 기지 900uu 위 목표, 속도+80, 시안색
+    if (WaveIndex >= 1 && FMath::FRand() < 0.3f)
+    {
+        M->Variant    = EMonsterVariant::Flying;
+        M->MoveSpeed += 80.f;
+        M->TargetLoc  = Base ? Base->GetActorLocation() + FVector(0, 0, 900.f) : M->TargetLoc;
+    }
+
     AliveMonsters++;
 }
 
@@ -327,23 +335,25 @@ void ANeonGameMode::InitDefaultTables()
 {
     if (WaveTable.Num() == 0)
     {
-        auto Make = [](TArray<ESpawnDir> Dirs, int32 Num, float HP, float Interval) -> FWaveDef
+        auto Make = [](TArray<ESpawnDir> Dirs, int32 Num, float HP,
+                       float Interval, float Speed, float DPS) -> FWaveDef
         {
             FWaveDef W;
             W.Entrances     = Dirs;
             W.TotalMonsters = Num;
             W.MonsterHP     = HP;
             W.SpawnInterval = Interval;
-            W.MoveSpeed     = 350.f;
-            W.AttackDPS     = 1.f;
+            W.MoveSpeed     = Speed;
+            W.AttackDPS     = DPS;
             return W;
         };
-        WaveTable.Add(Make({ESpawnDir::North},                                      5, 1.f, 2.0f));
-        WaveTable.Add(Make({ESpawnDir::North},                                     10, 1.f, 1.5f));
-        WaveTable.Add(Make({ESpawnDir::North, ESpawnDir::East},                    15, 2.f, 1.0f));
-        WaveTable.Add(Make({ESpawnDir::North, ESpawnDir::East, ESpawnDir::South},  20, 2.f, 1.0f));
+        //                    Dirs                                                  Num  HP    Intv  Spd   DPS
+        WaveTable.Add(Make({ESpawnDir::North},                                      5,  5.f,  2.0f, 350.f, 1.0f));
+        WaveTable.Add(Make({ESpawnDir::North},                                     10,  5.f,  1.5f, 400.f, 1.0f));
+        WaveTable.Add(Make({ESpawnDir::North, ESpawnDir::East},                    15, 10.f,  1.0f, 420.f, 1.5f));
+        WaveTable.Add(Make({ESpawnDir::North, ESpawnDir::East, ESpawnDir::South},  20, 10.f,  1.0f, 450.f, 2.0f));
         WaveTable.Add(Make({ESpawnDir::North, ESpawnDir::East,
-                            ESpawnDir::South, ESpawnDir::West},                    30, 3.f, 0.8f));
+                            ESpawnDir::South, ESpawnDir::West},                    30, 15.f,  0.8f, 500.f, 2.5f));
     }
 
     if (BlockTable.Num() == 0)

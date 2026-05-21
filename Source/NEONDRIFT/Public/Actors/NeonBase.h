@@ -15,7 +15,7 @@ class NEONDRIFT_API ABase : public AActor, public IDamageable
 public:
     ABase();
 
-    UPROPERTY(EditAnywhere) float MaxHP = 5.f;
+    UPROPERTY(EditAnywhere) float MaxHP = 30.f;
     UPROPERTY(EditAnywhere) TSubclassOf<UCameraShakeBase> HitShakeClass;
     UPROPERTY(EditAnywhere, Category="Audio") USoundBase* HitSound     = nullptr;
     UPROPERTY(EditAnywhere, Category="Audio") USoundBase* DestroySound = nullptr;

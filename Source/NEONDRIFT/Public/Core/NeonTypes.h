@@ -12,6 +12,9 @@ UENUM(BlueprintType)
 enum class EMonsterColor : uint8 { Orange, Cyan };
 
 UENUM(BlueprintType)
+enum class EMonsterVariant : uint8 { Ground, Flying };
+
+UENUM(BlueprintType)
 enum class EGamePhase : uint8 { PreWave, Gather, Combat, Shop, GameOver, Victory };
 
 UENUM(BlueprintType)

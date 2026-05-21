@@ -19,16 +19,20 @@ public:
     float MaxHP      = 1.f;
     float MoveSpeed  = 1000.f;
     float AttackDPS  = 1.f;
-    EMonsterColor Color = EMonsterColor::Orange;
+    EMonsterColor   Color   = EMonsterColor::Orange;
+    EMonsterVariant Variant = EMonsterVariant::Ground;
     FVector TargetLoc   = FVector::ZeroVector;
 
     UPROPERTY() TWeakObjectPtr<ABase>         BaseRef;
     UPROPERTY() TWeakObjectPtr<ANeonGameMode> GameModeRef;
 
-    FVector TargetOffset = FVector::ZeroVector; // A: 진입각 오프셋
-    float   WanderPhase  = 0.f;
-    float   WanderFreq   = 1.f;
-    float   WanderTime   = 0.f;
+    FVector TargetOffset    = FVector::ZeroVector;
+    float   WanderPhase     = 0.f;
+    float   WanderFreq      = 1.f;
+    float   WanderAmplitude = 0.4f;
+    float   WanderTime      = 0.f;
+    float   ChargeTimer     = 5.f;
+    float   ChargeDuration  = 0.f;
 
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;

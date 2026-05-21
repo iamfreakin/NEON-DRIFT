@@ -43,9 +43,9 @@ void AMonster::Tick(float DeltaTime)
     if (!bMIDInitialized && MID)
     {
         bMIDInitialized = true;
-        FLinearColor C = (Color == EMonsterColor::Orange)
-            ? FLinearColor(1.f, 0.25f, 0.f)
-            : FLinearColor(0.8f, 0.f, 1.f); // magenta
+        FLinearColor C = (Variant == EMonsterVariant::Flying)
+            ? FLinearColor(0.f, 1.f, 1.f)   // 시안형 비행형
+            : FLinearColor(1.f, 0.25f, 0.f); // 오렌지색 지상형
         MID->SetVectorParameterValue(TEXT("BaseColor"), C);
         MID->SetScalarParameterValue(TEXT("Glow"), 3.f);
     }
