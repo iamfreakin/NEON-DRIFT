@@ -38,8 +38,8 @@ void ANeonGameMode::BeginPlay()
     RefreshAutoTurrets();
     EnterPhase(EGamePhase::MainMenu);
 
-    if (BGMSound)          BGMAudio      = UGameplayStatics::SpawnSound2D(this, BGMSound);
-    if (RainAmbienceSound) AmbienceAudio = UGameplayStatics::SpawnSound2D(this, RainAmbienceSound);
+    if (MainMenuBGMSound)  MainMenuBGMAudio = UGameplayStatics::SpawnSound2D(this, MainMenuBGMSound);
+    if (RainAmbienceSound) AmbienceAudio    = UGameplayStatics::SpawnSound2D(this, RainAmbienceSound);
 }
 
 void ANeonGameMode::Tick(float DeltaSeconds)
@@ -139,6 +139,8 @@ void ANeonGameMode::EnterPhase(EGamePhase NewPhase)
 void ANeonGameMode::StartGame()
 {
     if (Phase != EGamePhase::MainMenu) return;
+    if (MainMenuBGMAudio) MainMenuBGMAudio->FadeOut(1.5f, 0.f);
+    if (BGMSound) BGMAudio = UGameplayStatics::SpawnSound2D(this, BGMSound);
     SpawnResourceField();
     EnterPhase(EGamePhase::PreWave);
 }

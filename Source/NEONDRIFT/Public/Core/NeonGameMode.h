@@ -44,6 +44,7 @@ public:
     UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* ShardCollectSound = nullptr;
     UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* BlockHitSound     = nullptr;
     UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* BlockBreakSound   = nullptr;
+    UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* MainMenuBGMSound  = nullptr;
     UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* BGMSound          = nullptr;
     UPROPERTY(EditDefaultsOnly, Category="Audio") USoundBase* RainAmbienceSound = nullptr;
 
@@ -84,8 +85,9 @@ public:
 private:
     float SpawnAccum              = 0.f;
     float MonsterDeathSoundTimer  = 0.f;
-    UPROPERTY() UAudioComponent* BGMAudio      = nullptr;
-    UPROPERTY() UAudioComponent* AmbienceAudio = nullptr;
+    UPROPERTY() UAudioComponent* MainMenuBGMAudio = nullptr;
+    UPROPERTY() UAudioComponent* BGMAudio         = nullptr;
+    UPROPERTY() UAudioComponent* AmbienceAudio    = nullptr;
 
     void InitDefaultTables();
     void SpawnResourceField();
