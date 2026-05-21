@@ -122,7 +122,7 @@ void AMonster::Tick(float DeltaTime)
         else
         {
             bAttacking = false;
-            OrbitRadius = FMath::Max(AttackRange * 0.6f, OrbitRadius - 100.f * DeltaTime);
+            OrbitRadius = FMath::Max(AttackRange * 0.6f, OrbitRadius - 1000.f * DeltaTime);
             OrbitAngle += (MoveSpeed / FMath::Max(OrbitRadius, 1.f)) * DeltaTime;
 
             FVector BaseLoc = Base->GetActorLocation();

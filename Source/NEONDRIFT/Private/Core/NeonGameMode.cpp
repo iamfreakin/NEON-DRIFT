@@ -290,7 +290,7 @@ void ANeonGameMode::SpawnMonsterAtEntrance(int32 EntranceIdx)
     {
         M->Variant    = EMonsterVariant::Flying;
         M->MoveSpeed += 80.f;
-        M->TargetLoc  = Base ? Base->GetActorLocation() + FVector(0, 0, 900.f) : M->TargetLoc;
+        M->TargetLoc  = Base ? Base->GetActorLocation() + FVector(0, 0, 1400.f) : M->TargetLoc;
     }
 
     AliveMonsters++;
