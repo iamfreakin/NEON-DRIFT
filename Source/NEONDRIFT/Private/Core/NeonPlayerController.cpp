@@ -115,19 +115,39 @@ void ANeonPlayerController::Tick(float DeltaSeconds)
 
 void ANeonPlayerController::OnShopUp()
 {
-    ShopCursorIndex = FMath::Max(0, ShopCursorIndex - 1);
-    if (ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this)))
-        if (GM->ShopNavigateSound) UGameplayStatics::PlaySound2D(this, GM->ShopNavigateSound);
+    ANeonGameMode*     GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
+    UNeonGameInstance* GI = Cast<UNeonGameInstance>(GetGameInstance());
+    if (!GM) return;
+
+    for (int32 i = ShopCursorIndex - 1; i >= 0; i--)
+    {
+        const FUpgradeDef& D = GM->UpgradeTable[i];
+        if (!GI || GI->Upgrades.GetLevel(D.Id) < D.MaxLevel)
+        {
+            ShopCursorIndex = i;
+            if (GM->ShopNavigateSound) UGameplayStatics::PlaySound2D(this, GM->ShopNavigateSound);
+            return;
+        }
+    }
 }
 
 void ANeonPlayerController::OnShopDown()
 {
-    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
-    int32 Max = GM ? GM->UpgradeTable.Num() - 1 : 0;
-    ShopCursorIndex = FMath::Min(Max, ShopCursorIndex + 1);
-    if (GM && GM->ShopNavigateSound) UGameplayStatics::PlaySound2D(this, GM->ShopNavigateSound);
-}
+    ANeonGameMode*     GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
+    UNeonGameInstance* GI = Cast<UNeonGameInstance>(GetGameInstance());
+    if (!GM) return;
 
+    for (int32 i = ShopCursorIndex + 1; i < GM->UpgradeTable.Num(); i++)
+    {
+        const FUpgradeDef& D = GM->UpgradeTable[i];
+        if (!GI || GI->Upgrades.GetLevel(D.Id) < D.MaxLevel)
+        {
+            ShopCursorIndex = i;
+            if (GM->ShopNavigateSound) UGameplayStatics::PlaySound2D(this, GM->ShopNavigateSound);
+            return;
+        }
+    }
+}
 void ANeonPlayerController::OnShopConfirm()
 {
     ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));

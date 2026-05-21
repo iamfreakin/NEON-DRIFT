@@ -107,7 +107,13 @@ void ANeonGameMode::EnterPhase(EGamePhase NewPhase)
                 PC->BoardedTurret = nullptr;
                 PC->SetViewTargetWithBlend(PC->GetPawn(), 0.25f);
             }
+            UNeonGameInstance* GI = Cast<UNeonGameInstance>(GetGameInstance());
             PC->ShopCursorIndex = 0;
+            for (int32 i = 0; i < UpgradeTable.Num(); i++)
+            {
+                if (!GI || GI->Upgrades.GetLevel(UpgradeTable[i].Id) < UpgradeTable[i].MaxLevel)
+                { PC->ShopCursorIndex = i; break; }
+            }
         }
         break;
 
@@ -354,6 +360,6 @@ void ANeonGameMode::InitDefaultTables()
         UpgradeTable.Add(MU(EUpgradeId::Turret_Rotate,    TEXT("Turret RotSpeed"), TEXT("+90deg/s"),        20, 3));
         UpgradeTable.Add(MU(EUpgradeId::Turret_Attack,    TEXT("Turret Attack"),   TEXT("+1 DMG"),          15, 4));
         UpgradeTable.Add(MU(EUpgradeId::Turret_FireRate,  TEXT("Turret FireRate"), TEXT("+1 shot/s"),       15, 5));
-        UpgradeTable.Add(MU(EUpgradeId::AutoTurret_Count, TEXT("Auto Turret +1"),  TEXT("+1 turret"),       30, 4));
+        UpgradeTable.Add(MU(EUpgradeId::AutoTurret_Count, TEXT("Auto Turret +1"),  TEXT("+1 turret"),       30, 3));
     }
 }
