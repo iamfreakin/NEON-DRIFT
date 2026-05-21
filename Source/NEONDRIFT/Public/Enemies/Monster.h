@@ -6,6 +6,7 @@
 
 class ABase;
 class ANeonGameMode;
+class UNiagaraComponent;
 
 UCLASS()
 class NEONDRIFT_API AMonster : public AActor, public IDamageable
@@ -39,8 +40,10 @@ public:
     virtual void TakeHit(float Damage, int32 AttackerPower) override;
 
 private:
-    UPROPERTY() UStaticMeshComponent* Mesh = nullptr;
-    UPROPERTY() UMaterialInstanceDynamic* MID = nullptr;
+    UPROPERTY() UStaticMeshComponent*     Mesh    = nullptr;
+    UPROPERTY() UMaterialInstanceDynamic* MID     = nullptr;
+    UPROPERTY() UNiagaraComponent* TrailFX_BL = nullptr;
+    UPROPERTY() UNiagaraComponent* TrailFX_BR = nullptr;
     bool  bAttacking          = false;
     bool  bMIDInitialized     = false;
     float AttackRange         = 2000.f;

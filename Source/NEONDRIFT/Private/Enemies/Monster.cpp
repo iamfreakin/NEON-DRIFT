@@ -1,5 +1,7 @@
 #include "Monster.h"
 #include "DrawDebugHelpers.h"
+#include "NiagaraComponent.h"
+#include "NiagaraSystem.h"
 #include "NeonBase.h"
 #include "NeonGameMode.h"
 #include "Components/StaticMeshComponent.h"
@@ -27,12 +29,32 @@ AMonster::AMonster()
         Mesh->SetMaterial(0, NeonMat.Object);
 
     SetActorScale3D(FVector(1.f));
+
+    // Monster cube scale (1,1,1) → half-extents: ±50
+    TrailFX_BL = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailFX_BL"));
+    TrailFX_BL->SetupAttachment(RootComponent);
+    TrailFX_BL->SetRelativeLocation(FVector(-50,  50, 0));
+    TrailFX_BL->bAutoActivate = false;
+
+    TrailFX_BR = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailFX_BR"));
+    TrailFX_BR->SetupAttachment(RootComponent);
+    TrailFX_BR->SetRelativeLocation(FVector(-50, -50, 0));
+    TrailFX_BR->bAutoActivate = false;
 }
 
 void AMonster::BeginPlay()
 {
     Super::BeginPlay();
     MID = Mesh->CreateAndSetMaterialInstanceDynamic(0);
+    if (UNiagaraSystem* NS = LoadObject<UNiagaraSystem>(nullptr, TEXT("/Game/FX/NS_NeonTrail.NS_NeonTrail")))
+    {
+        TArray<UNiagaraComponent*> Trails = {TrailFX_BL, TrailFX_BR};
+        for (UNiagaraComponent* T : Trails)
+        {
+            T->SetAsset(NS);
+            T->Activate(true);
+        }
+    }
 }
 
 void AMonster::Tick(float DeltaTime)
@@ -44,10 +66,14 @@ void AMonster::Tick(float DeltaTime)
     {
         bMIDInitialized = true;
         FLinearColor C = (Variant == EMonsterVariant::Flying)
-            ? FLinearColor(0.f, 1.f, 1.f)   // 시안형 비행형
-            : FLinearColor(1.f, 0.25f, 0.f); // 오렌지색 지상형
+            ? FLinearColor(0.f, 1.f, 1.f)
+            : FLinearColor(1.f, 0.25f, 0.f);
         MID->SetVectorParameterValue(TEXT("BaseColor"), C);
         MID->SetScalarParameterValue(TEXT("Glow"), 3.f);
+
+        TArray<UNiagaraComponent*> Trails = {TrailFX_BL, TrailFX_BR};
+        for (UNiagaraComponent* T : Trails)
+            if (T) T->SetColorParameter(FName("TrailColor"), C);
     }
 
     ABase* Base = BaseRef.Get();
