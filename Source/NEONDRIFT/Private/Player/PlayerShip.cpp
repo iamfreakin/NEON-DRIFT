@@ -151,7 +151,7 @@ void APlayerShip::UpdateTrail(float DeltaTime)
     {
         float Alpha = 1.f - TrailAge[i] / 0.4f;
         FVector Scale = FVector(2.f, 1.f, 0.4f) * Alpha * 0.8f;
-        TrailISMC->AddInstanceWorldSpace(FTransform(TrailRot[i], TrailPos[i], Scale));
+        TrailISMC->AddInstance(FTransform(TrailRot[i], TrailPos[i], Scale), true);
     }
 }
 
