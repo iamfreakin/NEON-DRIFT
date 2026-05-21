@@ -258,6 +258,12 @@ void ANeonGameMode::SpawnMonsterAtEntrance(int32 EntranceIdx)
     M->WanderPhase = FMath::FRandRange(0.f, 2.f * PI);
     M->WanderFreq  = FMath::FRandRange(0.6f, 1.4f);
 
+    // 개체별 속도 산포 + 흔들림 강도 + 크기 + 돌진 대기 시간 스태거
+    M->MoveSpeed       *= FMath::FRandRange(0.7f, 1.3f);
+    M->WanderAmplitude  = FMath::FRandRange(0.15f, 0.65f);
+    M->ChargeTimer      = FMath::FRandRange(2.f, 8.f);  // 동시 돌진 방지
+    M->SetActorScale3D(FVector(FMath::FRandRange(0.7f, 1.4f)));
+
     // 비행형: 웨이브 2부터 30% 확률, 기지 900uu 위 목표, 속도+80, 시안색
     if (WaveIndex >= 1 && FMath::FRand() < 0.3f)
     {

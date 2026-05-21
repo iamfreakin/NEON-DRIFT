@@ -74,17 +74,31 @@ void AMonster::Tick(float DeltaTime)
     {
         bAttacking = false;
 
-        // A: 기지 근처에서는 직선 진입, 멀면 오프셋 목표로 비스듬히 접근
+        // 돌진 시스템
+        ChargeDuration -= DeltaTime;
+        ChargeTimer    -= DeltaTime;
+        if (ChargeTimer <= 0.f && ChargeDuration <= 0.f)
+        {
+            ChargeDuration = FMath::FRandRange(0.8f, 1.5f);
+            ChargeTimer    = FMath::FRandRange(3.f, 7.f);
+        }
+        bool bCharging = ChargeDuration > 0.f;
+
+        // A: 비행형/돌진형은 기지로 직진 (돌진 중 흔들림 제거)
         FVector BaseLoc    = Base->GetActorLocation();
-        FVector MoveTarget = (DistToBase > AttackRange * 1.5f) ? BaseLoc + TargetOffset : BaseLoc;
+        FVector MoveTarget = (!bCharging && DistToBase > AttackRange * 1.5f) ? BaseLoc + TargetOffset : BaseLoc;
         FVector Dir        = (MoveTarget - GetActorLocation()).GetSafeNormal();
 
-        // B: 횡방향 사인파 흔들림
-        WanderTime += DeltaTime;
-        FVector Lateral = FVector::CrossProduct(FVector::UpVector, Dir).GetSafeNormal();
-        Dir = (Dir + Lateral * FMath::Sin(WanderTime * WanderFreq + WanderPhase) * 0.4f).GetSafeNormal();
+        // B: 횡방향 사인파 흔들림 (돌진 중 중단)
+        if (!bCharging)
+        {
+            WanderTime += DeltaTime;
+            FVector Lateral = FVector::CrossProduct(FVector::UpVector, Dir).GetSafeNormal();
+            Dir = (Dir + Lateral * FMath::Sin(WanderTime * WanderFreq + WanderPhase) * WanderAmplitude).GetSafeNormal();
+        }
 
-        AddActorWorldOffset(Dir * MoveSpeed * DeltaTime, true);
+        float ActualSpeed = bCharging ? MoveSpeed * 2.5f : MoveSpeed;
+        AddActorWorldOffset(Dir * ActualSpeed * DeltaTime, true);
     }
 }
 
