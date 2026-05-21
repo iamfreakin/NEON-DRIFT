@@ -1,4 +1,5 @@
 #include "NeonGameMode.h"
+#include "Components/AudioComponent.h"
 #include "NeonGameInstance.h"
 #include "NeonBase.h"
 #include "SpawnPoint.h"
@@ -38,13 +39,15 @@ void ANeonGameMode::BeginPlay()
     SpawnResourceField();
     EnterPhase(EGamePhase::PreWave);
 
-    if (BGMSound)          UGameplayStatics::SpawnSound2D(this, BGMSound);
-    if (RainAmbienceSound) UGameplayStatics::SpawnSound2D(this, RainAmbienceSound);
+    if (BGMSound)          BGMAudio      = UGameplayStatics::SpawnSound2D(this, BGMSound);
+    if (RainAmbienceSound) AmbienceAudio = UGameplayStatics::SpawnSound2D(this, RainAmbienceSound);
 }
 
 void ANeonGameMode::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+
+    if (MonsterDeathSoundTimer > 0.f) MonsterDeathSoundTimer -= DeltaSeconds;
 
     switch (Phase)
     {
@@ -111,6 +114,8 @@ void ANeonGameMode::EnterPhase(EGamePhase NewPhase)
     case EGamePhase::GameOver:
     case EGamePhase::Victory:
         if (ManualTurret) ManualTurret->SetPlayerBoarded(false);
+        if (BGMAudio)      BGMAudio->FadeOut(2.0f, 0.0f);
+        if (AmbienceAudio) AmbienceAudio->FadeOut(2.0f, 0.0f);
         break;
 
     default: break;
@@ -132,7 +137,11 @@ void ANeonGameMode::AddResources(int32 Amount)
 void ANeonGameMode::OnMonsterKilled()
 {
     AliveMonsters = FMath::Max(0, AliveMonsters - 1);
-    if (MonsterDeathSound) UGameplayStatics::PlaySound2D(this, MonsterDeathSound);
+    if (MonsterDeathSound && MonsterDeathSoundTimer <= 0.f)
+    {
+        UGameplayStatics::PlaySound2D(this, MonsterDeathSound);
+        MonsterDeathSoundTimer = 0.15f;
+    }
 }
 
 void ANeonGameMode::OnBaseDestroyed()

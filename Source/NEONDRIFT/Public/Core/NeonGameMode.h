@@ -6,6 +6,7 @@
 #include "NeonGameMode.generated.h"
 
 class ABase;
+class UAudioComponent;
 class ASpawnPoint;
 class AAutoTurret;
 class AManualTurret;
@@ -79,7 +80,10 @@ public:
     FUpgradeDef* FindUpgradeDef(EUpgradeId Id);
 
 private:
-    float SpawnAccum = 0.f;
+    float SpawnAccum              = 0.f;
+    float MonsterDeathSoundTimer  = 0.f;
+    UPROPERTY() UAudioComponent* BGMAudio      = nullptr;
+    UPROPERTY() UAudioComponent* AmbienceAudio = nullptr;
 
     void InitDefaultTables();
     void SpawnResourceField();
