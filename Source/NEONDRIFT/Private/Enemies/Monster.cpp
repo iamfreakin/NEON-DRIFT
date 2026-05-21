@@ -61,19 +61,31 @@ void AMonster::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    // Color is assigned by GameMode after SpawnActor, so initialize on first Tick
-    if (!bMIDInitialized && MID)
+    // Variant is assigned by GameMode after SpawnActor, so init on first Tick
+    if (!bMIDInitialized)
     {
         bMIDInitialized = true;
-        FLinearColor C = (Variant == EMonsterVariant::Flying)
-            ? FLinearColor(0.f, 1.f, 1.f)
-            : FLinearColor(1.f, 0.25f, 0.f);
-        MID->SetVectorParameterValue(TEXT("BaseColor"), C);
-        MID->SetScalarParameterValue(TEXT("Glow"), 3.f);
 
-        TArray<UNiagaraComponent*> Trails = {TrailFX_BL, TrailFX_BR};
-        for (UNiagaraComponent* T : Trails)
-            if (T) T->SetColorParameter(FName("TrailColor"), C);
+        if (Variant == EMonsterVariant::Flying)
+        {
+            if (UStaticMesh* ConeMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Cone.Cone")))
+                Mesh->SetStaticMesh(ConeMesh);
+            Mesh->SetRelativeRotation(FRotator(90.f, 0.f, 0.f)); // tip → +X (forward)
+            MID = Mesh->CreateAndSetMaterialInstanceDynamic(0);
+        }
+
+        if (MID)
+        {
+            FLinearColor C = (Variant == EMonsterVariant::Flying)
+                ? FLinearColor(0.f, 1.f, 1.f)
+                : FLinearColor(1.f, 0.25f, 0.f);
+            MID->SetVectorParameterValue(TEXT("BaseColor"), C);
+            MID->SetScalarParameterValue(TEXT("Glow"), 3.f);
+
+            TArray<UNiagaraComponent*> Trails = {TrailFX_BL, TrailFX_BR};
+            for (UNiagaraComponent* T : Trails)
+                if (T) T->SetColorParameter(FName("TrailColor"), C);
+        }
     }
 
     ABase* Base = BaseRef.Get();
@@ -81,6 +93,55 @@ void AMonster::Tick(float DeltaTime)
 
     float DistToBase = FVector::Dist(GetActorLocation(), Base->GetActorLocation());
 
+    // ── Flying: orbital spiral ────────────────────────────────
+    if (Variant == EMonsterVariant::Flying)
+    {
+        if (!bOrbitInitialized)
+        {
+            bOrbitInitialized = true;
+            FVector Flat = GetActorLocation() - Base->GetActorLocation();
+            Flat.Z = 0.f;
+            OrbitRadius = FMath::Max(AttackRange, Flat.Size());
+            OrbitAngle  = FMath::Atan2(Flat.Y, Flat.X);
+        }
+
+        if (DistToBase <= AttackRange)
+        {
+            bAttacking = true;
+            Base->TakeHit(AttackDPS * DeltaTime, 0);
+            AttackSoundCooldown -= DeltaTime;
+            if (AttackSoundCooldown <= 0.f)
+            {
+                AttackSoundCooldown = 1.5f;
+                DrawDebugLine(GetWorld(), GetActorLocation(), Base->GetActorLocation(), FColor::Red, false, 0.3f, 0, 2.f);
+                if (ANeonGameMode* GM = GameModeRef.Get())
+                    if (GM->MonsterAttackSound)
+                        UGameplayStatics::SpawnSoundAtLocation(this, GM->MonsterAttackSound, GetActorLocation());
+            }
+        }
+        else
+        {
+            bAttacking = false;
+            OrbitRadius = FMath::Max(AttackRange * 0.6f, OrbitRadius - 100.f * DeltaTime);
+            OrbitAngle += (MoveSpeed / FMath::Max(OrbitRadius, 1.f)) * DeltaTime;
+
+            FVector BaseLoc = Base->GetActorLocation();
+            FVector Target(
+                BaseLoc.X + FMath::Cos(OrbitAngle) * OrbitRadius,
+                BaseLoc.Y + FMath::Sin(OrbitAngle) * OrbitRadius,
+                TargetLoc.Z
+            );
+
+            FVector MoveDir = (Target - GetActorLocation()).GetSafeNormal();
+            AddActorWorldOffset(MoveDir * MoveSpeed * DeltaTime, true);
+
+            if (!MoveDir.IsNearlyZero())
+                SetActorRotation(FMath::RInterpTo(GetActorRotation(), MoveDir.Rotation(), DeltaTime, 8.f));
+        }
+        return;
+    }
+
+    // ── Ground: existing logic ────────────────────────────────
     if (DistToBase <= AttackRange)
     {
         Base->TakeHit(AttackDPS * DeltaTime, 0);
@@ -100,7 +161,6 @@ void AMonster::Tick(float DeltaTime)
     {
         bAttacking = false;
 
-        // 돌진 시스템
         ChargeDuration -= DeltaTime;
         ChargeTimer    -= DeltaTime;
         if (ChargeTimer <= 0.f && ChargeDuration <= 0.f)
@@ -110,12 +170,10 @@ void AMonster::Tick(float DeltaTime)
         }
         bool bCharging = ChargeDuration > 0.f;
 
-        // A: 비행형/돌진형은 기지로 직진 (돌진 중 흔들림 제거)
         FVector BaseLoc    = Base->GetActorLocation();
         FVector MoveTarget = (!bCharging && DistToBase > AttackRange * 1.5f) ? BaseLoc + TargetOffset : BaseLoc;
         FVector Dir        = (MoveTarget - GetActorLocation()).GetSafeNormal();
 
-        // B: 횡방향 사인파 흔들림 (돌진 중 중단)
         if (!bCharging)
         {
             WanderTime += DeltaTime;

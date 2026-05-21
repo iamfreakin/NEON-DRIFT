@@ -48,4 +48,9 @@ private:
     bool  bMIDInitialized     = false;
     float AttackRange         = 2000.f;
     float AttackSoundCooldown = 0.f;
+
+    // Flying orbit state
+    float OrbitAngle        = 0.f;
+    float OrbitRadius       = 0.f;
+    bool  bOrbitInitialized = false;
 };
