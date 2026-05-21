@@ -15,7 +15,7 @@ UENUM(BlueprintType)
 enum class EMonsterVariant : uint8 { Ground, Flying };
 
 UENUM(BlueprintType)
-enum class EGamePhase : uint8 { PreWave, Gather, Combat, Shop, GameOver, Victory };
+enum class EGamePhase : uint8 { MainMenu, PreWave, Gather, Combat, Shop, GameOver, Victory };
 
 UENUM(BlueprintType)
 enum class ESpawnDir : uint8 { North, East, South, West };

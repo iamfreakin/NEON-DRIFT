@@ -36,8 +36,7 @@ void ANeonGameMode::BeginPlay()
     if (Base) Base->GameModeRef = this;
 
     RefreshAutoTurrets();
-    SpawnResourceField();
-    EnterPhase(EGamePhase::PreWave);
+    EnterPhase(EGamePhase::MainMenu);
 
     if (BGMSound)          BGMAudio      = UGameplayStatics::SpawnSound2D(this, BGMSound);
     if (RainAmbienceSound) AmbienceAudio = UGameplayStatics::SpawnSound2D(this, RainAmbienceSound);
@@ -51,6 +50,11 @@ void ANeonGameMode::Tick(float DeltaSeconds)
 
     switch (Phase)
     {
+    case EGamePhase::PreWave:
+        PreWaveTimer -= DeltaSeconds;
+        if (PreWaveTimer <= 0.f) EnterPhase(EGamePhase::Gather);
+        break;
+
     case EGamePhase::Gather:
         GatherTimer -= DeltaSeconds;
         if (GatherTimer <= 0.f) EnterPhase(EGamePhase::Combat);
@@ -76,7 +80,11 @@ void ANeonGameMode::EnterPhase(EGamePhase NewPhase)
 
     switch (NewPhase)
     {
+    case EGamePhase::MainMenu:
+        break;
+
     case EGamePhase::PreWave:
+        PreWaveTimer = 5.f;
         break;
 
     case EGamePhase::Gather:
@@ -128,10 +136,17 @@ void ANeonGameMode::EnterPhase(EGamePhase NewPhase)
     }
 }
 
+void ANeonGameMode::StartGame()
+{
+    if (Phase != EGamePhase::MainMenu) return;
+    UGameplayStatics::SetGamePaused(GetWorld(), false);
+    SpawnResourceField();
+    EnterPhase(EGamePhase::PreWave);
+}
+
 void ANeonGameMode::RequestStartWave()
 {
-    if (Phase == EGamePhase::PreWave)      EnterPhase(EGamePhase::Gather);
-    else if (Phase == EGamePhase::Gather)  EnterPhase(EGamePhase::Combat);
+    if (Phase == EGamePhase::Gather) EnterPhase(EGamePhase::Combat);
 }
 
 void ANeonGameMode::AddResources(int32 Amount)

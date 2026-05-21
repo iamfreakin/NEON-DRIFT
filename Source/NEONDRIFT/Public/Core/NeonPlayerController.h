@@ -30,8 +30,13 @@ public:
     UPROPERTY() UInputAction*         IA_NextWave    = nullptr;
     UPROPERTY() UInputAction*         IA_Restart     = nullptr;
     UPROPERTY() UInputAction*         IA_Interact    = nullptr;
+    UPROPERTY() UInputAction*         IA_Escape      = nullptr;
 
     UPROPERTY() AManualTurret* BoardedTurret = nullptr;
+
+    bool  bPauseMenuOpen     = false;
+    bool  bShowControlsPanel = false;
+    int32 MenuCursorIndex    = 0;
 
     virtual void BeginPlay() override;
     virtual void SetupInputComponent() override;
@@ -43,6 +48,7 @@ public:
     void OnNextWave();
     void OnRestart();
     void OnInteract();
+    void OnEscapePressed();
 
     int32 ShopCursorIndex = 0;
 

@@ -10,6 +10,7 @@
 #include "InputModifiers.h"
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 ANeonPlayerController::ANeonPlayerController()
 {
@@ -66,6 +67,7 @@ void ANeonPlayerController::BuildIMC()
     IA_NextWave    = MakeBoolAction(this, IMC, EKeys::Tab,             TEXT("IA_NextWave"));
     IA_Restart     = MakeBoolAction(this, IMC, EKeys::R,               TEXT("IA_Restart"));
     IA_Interact    = MakeBoolAction(this, IMC, EKeys::E,               TEXT("IA_Interact"));
+    IA_Escape      = MakeBoolAction(this, IMC, EKeys::Escape,          TEXT("IA_Escape"));
 
     if (UEnhancedInputLocalPlayerSubsystem* Sub =
         ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
@@ -77,12 +79,14 @@ void ANeonPlayerController::BuildIMC()
 void ANeonPlayerController::BeginPlay()
 {
     Super::BeginPlay();
-    // Limit vertical look range — prevents disorienting straight-up/down views
     if (PlayerCameraManager)
     {
         PlayerCameraManager->ViewPitchMin = -60.f;
         PlayerCameraManager->ViewPitchMax = 60.f;
     }
+    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
+    if (GM && GM->Phase == EGamePhase::MainMenu)
+        SetPause(true);
 }
 
 void ANeonPlayerController::SetupInputComponent()
@@ -99,6 +103,7 @@ void ANeonPlayerController::SetupInputComponent()
         EIC->BindAction(IA_NextWave,    ETriggerEvent::Started, this, &ANeonPlayerController::OnNextWave);
         EIC->BindAction(IA_Restart,     ETriggerEvent::Started, this, &ANeonPlayerController::OnRestart);
         EIC->BindAction(IA_Interact,    ETriggerEvent::Started, this, &ANeonPlayerController::OnInteract);
+        EIC->BindAction(IA_Escape,      ETriggerEvent::Started, this, &ANeonPlayerController::OnEscapePressed);
     }
 }
 
@@ -116,10 +121,27 @@ void ANeonPlayerController::Tick(float DeltaSeconds)
 
 void ANeonPlayerController::OnShopUp()
 {
-    ANeonGameMode*     GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
-    UNeonGameInstance* GI = Cast<UNeonGameInstance>(GetGameInstance());
+    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
     if (!GM) return;
 
+    if (bPauseMenuOpen || GM->Phase == EGamePhase::MainMenu)
+    {
+        if (!bShowControlsPanel)
+        {
+            if (MenuCursorIndex > 0)
+            {
+                MenuCursorIndex--;
+                if (GM->ShopNavigateSound) UGameplayStatics::PlaySound2D(this, GM->ShopNavigateSound);
+            }
+            else
+            {
+                if (GM->ShopFailSound) UGameplayStatics::PlaySound2D(this, GM->ShopFailSound);
+            }
+        }
+        return;
+    }
+
+    UNeonGameInstance* GI = Cast<UNeonGameInstance>(GetGameInstance());
     for (int32 i = ShopCursorIndex - 1; i >= 0; i--)
     {
         const FUpgradeDef& D = GM->UpgradeTable[i];
@@ -134,10 +156,27 @@ void ANeonPlayerController::OnShopUp()
 
 void ANeonPlayerController::OnShopDown()
 {
-    ANeonGameMode*     GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
-    UNeonGameInstance* GI = Cast<UNeonGameInstance>(GetGameInstance());
+    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
     if (!GM) return;
 
+    if (bPauseMenuOpen || GM->Phase == EGamePhase::MainMenu)
+    {
+        if (!bShowControlsPanel)
+        {
+            if (MenuCursorIndex < 2)
+            {
+                MenuCursorIndex++;
+                if (GM->ShopNavigateSound) UGameplayStatics::PlaySound2D(this, GM->ShopNavigateSound);
+            }
+            else
+            {
+                if (GM->ShopFailSound) UGameplayStatics::PlaySound2D(this, GM->ShopFailSound);
+            }
+        }
+        return;
+    }
+
+    UNeonGameInstance* GI = Cast<UNeonGameInstance>(GetGameInstance());
     for (int32 i = ShopCursorIndex + 1; i < GM->UpgradeTable.Num(); i++)
     {
         const FUpgradeDef& D = GM->UpgradeTable[i];
@@ -151,10 +190,59 @@ void ANeonPlayerController::OnShopDown()
 }
 void ANeonPlayerController::OnShopConfirm()
 {
+    if (bShowControlsPanel) { bShowControlsPanel = false; return; }
+
+    if (bPauseMenuOpen)
+    {
+        ANeonGameMode* GMp = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
+        if (GMp && GMp->ShopBuySound) UGameplayStatics::PlaySound2D(this, GMp->ShopBuySound);
+        switch (MenuCursorIndex)
+        {
+        case 0: bPauseMenuOpen = false; MenuCursorIndex = 0; SetPause(false); break;
+        case 1: bShowControlsPanel = true; break;
+        case 2: UKismetSystemLibrary::QuitGame(GetWorld(), this, EQuitPreference::Quit, false); break;
+        }
+        return;
+    }
+
     ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
-    if (!GM || GM->Phase != EGamePhase::Shop) return;
+    if (!GM) return;
+
+    if (GM->Phase == EGamePhase::MainMenu)
+    {
+        if (GM->ShopBuySound) UGameplayStatics::PlaySound2D(this, GM->ShopBuySound);
+        switch (MenuCursorIndex)
+        {
+        case 0: MenuCursorIndex = 0; GM->StartGame(); break;
+        case 1: bShowControlsPanel = true; break;
+        case 2: UKismetSystemLibrary::QuitGame(GetWorld(), this, EQuitPreference::Quit, false); break;
+        }
+        return;
+    }
+
+    if (GM->Phase != EGamePhase::Shop) return;
     if (!GM->UpgradeTable.IsValidIndex(ShopCursorIndex)) return;
     GM->ApplyUpgrade(GM->UpgradeTable[ShopCursorIndex].Id);
+}
+
+void ANeonPlayerController::OnEscapePressed()
+{
+    if (bShowControlsPanel) { bShowControlsPanel = false; return; }
+    if (bPauseMenuOpen) { bPauseMenuOpen = false; MenuCursorIndex = 0; SetPause(false); return; }
+
+    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
+    if (!GM) return;
+
+    if (GM->Phase == EGamePhase::MainMenu)
+    {
+        UKismetSystemLibrary::QuitGame(GetWorld(), this, EQuitPreference::Quit, false);
+        return;
+    }
+    if (GM->Phase == EGamePhase::GameOver || GM->Phase == EGamePhase::Victory) return;
+
+    MenuCursorIndex = 0;
+    bPauseMenuOpen  = true;
+    SetPause(true);
 }
 
 void ANeonPlayerController::OnNextWave()

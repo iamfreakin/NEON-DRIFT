@@ -26,6 +26,7 @@ public:
     int32      WaveIndex            = 0;
     int32      Resources            = 0;
     float      GatherTimer          = 60.f;
+    float      PreWaveTimer         = 0.f;
     int32      AliveMonsters        = 0;
     int32      SpawnedThisWave      = 0;
     int32      TotalMonstersThisWave= 0;
@@ -69,6 +70,7 @@ public:
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaSeconds) override;
 
+    void StartGame();
     void EnterPhase(EGamePhase NewPhase);
     void RequestStartWave();
     void AddResources(int32 Amount);
