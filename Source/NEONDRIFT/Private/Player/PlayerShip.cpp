@@ -5,7 +5,8 @@
 #include "NeonPlayerController.h"
 #include "ManualTurret.h"
 #include "Components/StaticMeshComponent.h"
-#include "Components/InstancedStaticMeshComponent.h"
+#include "NiagaraComponent.h"
+#include "NiagaraSystem.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Engine/StaticMesh.h"
@@ -35,12 +36,16 @@ APlayerShip::APlayerShip()
     if (NeonMat.Succeeded())
         Mesh->SetMaterial(0, NeonMat.Object);
 
-    TrailISMC = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Trail"));
-    TrailISMC->SetupAttachment(RootComponent);
-    TrailISMC->SetCollisionProfileName(TEXT("NoCollision"));
-    TrailISMC->SetCastShadow(false);
-    if (CubeMesh.Succeeded())  TrailISMC->SetStaticMesh(CubeMesh.Object);
-    if (NeonMat.Succeeded())   TrailISMC->SetMaterial(0, NeonMat.Object);
+    // Ship mesh scale (2,1,0.4) → cube half-extents: X=100, Y=50
+    TrailFX_BL = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailFX_BL"));
+    TrailFX_BL->SetupAttachment(RootComponent);
+    TrailFX_BL->SetRelativeLocation(FVector(-100,  50, 0));
+    TrailFX_BL->bAutoActivate = false;
+
+    TrailFX_BR = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailFX_BR"));
+    TrailFX_BR->SetupAttachment(RootComponent);
+    TrailFX_BR->SetRelativeLocation(FVector(-100, -50, 0));
+    TrailFX_BR->bAutoActivate = false;
 
     SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
     SpringArm->SetupAttachment(RootComponent);
@@ -80,10 +85,15 @@ void APlayerShip::BeginPlay()
         ShipMID->SetScalarParameterValue(TEXT("Glow"), 3.f);
     }
 
-    if (UMaterialInstanceDynamic* TrailMID = TrailISMC->CreateAndSetMaterialInstanceDynamic(0))
+    if (UNiagaraSystem* NS = LoadObject<UNiagaraSystem>(nullptr, TEXT("/Game/FX/NS_NeonTrail.NS_NeonTrail")))
     {
-        TrailMID->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.f, 1.f, 1.f));
-        TrailMID->SetScalarParameterValue(TEXT("Glow"), 1.5f);
+        TArray<UNiagaraComponent*> Trails = {TrailFX_BL, TrailFX_BR};
+        for (UNiagaraComponent* T : Trails)
+        {
+            T->SetAsset(NS);
+            T->SetColorParameter(FName("TrailColor"), FLinearColor(0.f, 1.f, 1.f));
+            T->Activate(true);
+        }
     }
 
     if (EngineSound)
@@ -121,45 +131,10 @@ void APlayerShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
     EIC->BindAction(PC->IA_Ready,       ETriggerEvent::Started,   this, &APlayerShip::OnReady);
 }
 
-void APlayerShip::UpdateTrail(float DeltaTime)
-{
-    // Age + cull
-    for (int32 i = TrailAge.Num() - 1; i >= 0; i--)
-    {
-        TrailAge[i] += DeltaTime;
-        if (TrailAge[i] >= 0.4f)
-        {
-            TrailPos.RemoveAt(i);
-            TrailRot.RemoveAt(i);
-            TrailAge.RemoveAt(i);
-        }
-    }
-    // Sample
-    TrailSampleTimer += DeltaTime;
-    if (TrailSampleTimer >= 0.08f)
-    {
-        TrailSampleTimer = 0.f;
-        TrailPos.Insert(GetActorLocation(), 0);
-        TrailRot.Insert(GetActorQuat(),     0);
-        TrailAge.Insert(0.f,               0);
-        if (TrailPos.Num() > 10) { TrailPos.SetNum(10); TrailRot.SetNum(10); TrailAge.SetNum(10); }
-    }
-    // Rebuild ISMC
-    if (!TrailISMC) return;
-    TrailISMC->ClearInstances();
-    for (int32 i = 0; i < TrailPos.Num(); i++)
-    {
-        float Alpha = 1.f - TrailAge[i] / 0.4f;
-        FVector Scale = FVector(2.f, 1.f, 0.4f) * Alpha * 0.8f;
-        TrailISMC->AddInstance(FTransform(TrailRot[i], TrailPos[i], Scale), true);
-    }
-}
 
 void APlayerShip::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
-    UpdateTrail(DeltaTime);
 
     // When boarded in turret: freeze ship, route fire to turret
     ANeonPlayerController* PC = Cast<ANeonPlayerController>(GetController());
