@@ -84,9 +84,6 @@ void ANeonPlayerController::BeginPlay()
         PlayerCameraManager->ViewPitchMin = -60.f;
         PlayerCameraManager->ViewPitchMax = 60.f;
     }
-    ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
-    if (GM && GM->Phase == EGamePhase::MainMenu)
-        SetPause(true);
 }
 
 void ANeonPlayerController::SetupInputComponent()

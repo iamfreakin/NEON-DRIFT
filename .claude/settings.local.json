@@ -17,7 +17,12 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\Source\\\\NEONDRIFT\" -Recurse -Filter \"*.h\" -o File)",
       "Bash(Select-Object FullName)",
       "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -First 60)",
-      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -Last 5)"
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -Last 5)",
+      "Bash(\"C:\\\\Program Files\\\\Epic Games\\\\UE_5.5\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex)",
+      "Bash(\"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -NoHotReload)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -NoHotReload 2>&1 | Select-Object -Last 20)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -NoHotReload 2>&1 | Select-Object -Last 15)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -NoHotReload 2>&1 | Select-Object -Last 8)"
     ]
   }
 }

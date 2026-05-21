@@ -62,6 +62,8 @@ void ABase::Tick(float DeltaTime)
 
 void ABase::TakeHit(float Damage, int32 /*AttackerPower*/)
 {
+    if (GameModeRef && GameModeRef->Phase == EGamePhase::PreWave) return;
+
     CurrentHP = FMath::Max(0.f, CurrentHP - Damage);
     HitFlashTimer = 1.f;
 

@@ -281,6 +281,9 @@ void APlayerShip::CollectShards()
 
 void APlayerShip::TakeHit(float Damage, int32)
 {
+    if (ANeonGameMode* GMCheck = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this)))
+        if (GMCheck->Phase == EGamePhase::PreWave) return;
+
     CurrentHP -= Damage;
     if (HitSound) UGameplayStatics::SpawnSoundAtLocation(this, HitSound, GetActorLocation());
     if (CurrentHP <= 0.f)

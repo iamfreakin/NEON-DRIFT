@@ -105,16 +105,19 @@ void AManualTurret::Tick(float DeltaTime)
 
 void AManualTurret::Fire()
 {
-    FVector Start = TurretCamera->GetComponentLocation();
-    FVector End   = Start + BarrelMesh->GetForwardVector() * Stats.Range;
+    // Hit detection: from camera (screen center) in barrel direction
+    FVector TraceStart = TurretCamera->GetComponentLocation();
+    FVector TraceEnd   = TraceStart + BarrelMesh->GetForwardVector() * Stats.Range;
 
     FHitResult Hit;
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(this);
 
-    bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
-    FVector LineEnd = bHit ? Hit.ImpactPoint : End;
-    DrawDebugLine(GetWorld(), Start, LineEnd, FColor::Orange, false, 0.05f, 0, 2.f);
+    bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECC_Visibility, Params);
+    FVector HitPoint = bHit ? Hit.ImpactPoint : TraceEnd;
+
+    // Visual tracer: from muzzle to hit point
+    DrawDebugLine(GetWorld(), Muzzle->GetComponentLocation(), HitPoint, FColor::Orange, false, 0.05f, 0, 2.f);
     if (bHit)
     {
         DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.f, 6, FColor::Orange, false, 0.15f);

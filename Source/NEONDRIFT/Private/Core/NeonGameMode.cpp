@@ -139,7 +139,6 @@ void ANeonGameMode::EnterPhase(EGamePhase NewPhase)
 void ANeonGameMode::StartGame()
 {
     if (Phase != EGamePhase::MainMenu) return;
-    UGameplayStatics::SetGamePaused(GetWorld(), false);
     SpawnResourceField();
     EnterPhase(EGamePhase::PreWave);
 }
