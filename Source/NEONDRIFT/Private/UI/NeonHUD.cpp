@@ -69,12 +69,6 @@ void ANeonHUD::DrawHUD()
     DrawLine(CX, CY - Len, CX, CY - Gap, FLinearColor::White, 1.5f);
     DrawLine(CX, CY + Gap, CX, CY + Len, FLinearColor::White, 1.5f);
 
-    FVector BarrelTip = NeonPC->PlayerCameraManager->GetCameraLocation()
-                        + NeonPC->BoardedTurret->GetBarrelForward() * 8000.f;
-    FVector2D DotScreen;
-    if (NeonPC->ProjectWorldLocationToScreen(BarrelTip, DotScreen))
-    {
-        constexpr float S = 5.f;
-        DrawRect(FLinearColor(1.f, 0.7f, 0.f, 1.f), DotScreen.X - S, DotScreen.Y - S, S * 2.f, S * 2.f);
-    }
+    constexpr float S = 5.f;
+    DrawRect(FLinearColor(1.f, 0.7f, 0.f, 1.f), CX - S, CY - S, S * 2.f, S * 2.f);
 }
