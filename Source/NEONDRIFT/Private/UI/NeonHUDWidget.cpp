@@ -91,15 +91,15 @@ void UNeonHUDWidget::BuildLayout()
     TxtHP = MakeText(HC::White, 0.85f);
     PlaceAt(Root, TxtHP, {-20.f, 44.f}, {220.f, 22.f}, {1.f, 0.f}, {1.f, 0.f});
 
-    // ── Phase overlay (center) ────────────────────────────
-    TxtPhase = MakeText(HC::Cyan, 1.1f);
+    // ── Phase overlay (top-center, above combat area) ────────
+    TxtPhase = MakeText(HC::Cyan, 1.5f);
     TxtPhase->SetVisibility(ESlateVisibility::Collapsed);
-    PlaceAt(Root, TxtPhase, {0.f, -14.f}, {520.f, 28.f}, {0.5f, 0.5f}, {0.5f, 0.5f});
+    PlaceAt(Root, TxtPhase, {0.f, 58.f}, {600.f, 34.f}, {0.5f, 0.f}, {0.5f, 0.f});
 
     // ── Combat text (top, below wave) ─────────────────────
     TxtCombat = MakeText(HC::Red);
     TxtCombat->SetVisibility(ESlateVisibility::Collapsed);
-    PlaceAt(Root, TxtCombat, {0.f, 60.f}, {280.f, 28.f}, {0.5f, 0.f}, {0.5f, 0.f});
+    PlaceAt(Root, TxtCombat, {0.f, 58.f}, {300.f, 34.f}, {0.5f, 0.f}, {0.5f, 0.f});
 
     // ── GameOver / Victory ────────────────────────────────
     TxtGameState = MakeText(HC::Red, 2.5f);
@@ -181,6 +181,154 @@ void UNeonHUDWidget::BuildLayout()
     UTextBlock* Ctrl = MakeText(HC::White);
     Ctrl->SetText(FText::FromString(TEXT("[UP/DOWN] Navigate    [ENTER] Buy    [TAB] Next Wave")));
     PlaceAt(PanelShop, Ctrl, {30.f, 428.f}, {660.f, 28.f});
+
+    // Shared helper: add a full-stretch child to a canvas
+    auto AddStretchBg = [&](UCanvasPanel* Parent, FLinearColor Col)
+    {
+        UImage* Img = MakeSolidRect(Col);
+        UCanvasPanelSlot* S = Parent->AddChildToCanvas(Img);
+        S->SetAnchors(FAnchors(0.f, 0.f, 1.f, 1.f));
+        S->SetOffsets(FMargin(0.f));
+    };
+
+    // ── Main Menu Panel (full-screen, 1.3× scale) ────────────
+    {
+        PanelMainMenu = WidgetTree->ConstructWidget<UCanvasPanel>(UCanvasPanel::StaticClass());
+        UCanvasPanelSlot* S = Root->AddChildToCanvas(PanelMainMenu);
+        S->SetAnchors(FAnchors(0.f, 0.f, 1.f, 1.f));
+        S->SetOffsets(FMargin(0.f));
+        PanelMainMenu->SetVisibility(ESlateVisibility::Collapsed);
+
+        AddStretchBg(PanelMainMenu, FLinearColor(0.f, 0.01f, 0.04f, 0.92f));
+
+        // Title
+        UTextBlock* Title = MakeText(HC::Cyan, 5.85f);
+        Title->SetText(FText::FromString(TEXT("NEON DRIFT")));
+        PlaceAt(PanelMainMenu, Title, {0.f, -210.f}, {680.f, 120.f}, {0.5f, 0.5f}, {0.5f, 0.5f});
+
+        PlaceAt(PanelMainMenu, MakeSolidRect(HC::Cyan), {0.f, -115.f}, {480.f, 2.f}, {0.5f, 0.5f}, {0.5f, 0.5f});
+
+        // Navigable items
+        static const TCHAR* MainLabels[] = { TEXT("Start Game"), TEXT("Controls"), TEXT("Quit") };
+        const float ItemY[] = { -88.f, -35.f, 18.f };
+        for (int32 i = 0; i < 3; ++i)
+        {
+            UTextBlock* Item = MakeText(HC::White, 1.95f);
+            Item->SetText(FText::FromString(MainLabels[i]));
+            PlaceAt(PanelMainMenu, Item, {-20.f, ItemY[i]}, {400.f, 52.f}, {0.5f, 0.5f}, {0.f, 0.5f});
+            MainMenuItems.Add(Item);
+        }
+
+        PlaceAt(PanelMainMenu, MakeSolidRect(HC::Gray), {0.f, 68.f}, {480.f, 1.f}, {0.5f, 0.5f}, {0.5f, 0.5f});
+
+        UTextBlock* Hint = MakeText(HC::Gray, 1.1f);
+        Hint->SetText(FText::FromString(TEXT("[UP/DOWN] Navigate    [ENTER] Select    [ESC] Quit")));
+        PlaceAt(PanelMainMenu, Hint, {0.f, 82.f}, {580.f, 28.f}, {0.5f, 0.5f}, {0.5f, 0.5f});
+    }
+
+    // ── Pause Panel (centered 600×320, 1.3× scale) ───────────
+    {
+        PanelPause = WidgetTree->ConstructWidget<UCanvasPanel>(UCanvasPanel::StaticClass());
+        UCanvasPanelSlot* S = Root->AddChildToCanvas(PanelPause);
+        S->SetAnchors(FAnchors(0.f, 0.f, 1.f, 1.f));
+        S->SetOffsets(FMargin(0.f));
+        PanelPause->SetVisibility(ESlateVisibility::Collapsed);
+
+        AddStretchBg(PanelPause, FLinearColor(0.f, 0.f, 0.f, 0.72f));
+
+        UCanvasPanel* Inner = WidgetTree->ConstructWidget<UCanvasPanel>(UCanvasPanel::StaticClass());
+        PlaceAt(PanelPause, Inner, {0.f, 0.f}, {600.f, 320.f}, {0.5f, 0.5f}, {0.5f, 0.5f});
+
+        AddStretchBg(Inner, FLinearColor(0.f, 0.02f, 0.05f, 0.96f));
+        auto PBorder = [&](FVector2D Pos, FVector2D Sz) { PlaceAt(Inner, MakeSolidRect(HC::Cyan), Pos, Sz); };
+        PBorder({0.f,   0.f  }, {600.f, 2.f  });
+        PBorder({0.f,   318.f}, {600.f, 2.f  });
+        PBorder({0.f,   0.f  }, {2.f,   320.f});
+        PBorder({598.f, 0.f  }, {2.f,   320.f});
+
+        UTextBlock* PTitle = MakeText(HC::Cyan, 2.86f);
+        PTitle->SetText(FText::FromString(TEXT("PAUSED")));
+        PlaceAt(Inner, PTitle, {0.f, 20.f}, {240.f, 70.f}, {0.5f, 0.f}, {0.5f, 0.f});
+
+        PlaceAt(Inner, MakeSolidRect(HC::Cyan), {20.f, 96.f}, {560.f, 1.f});
+
+        static const TCHAR* PauseLabels[] = { TEXT("Resume"), TEXT("Controls"), TEXT("Quit Game") };
+        const float PItemY[] = { 108.f, 158.f, 208.f };
+        for (int32 i = 0; i < 3; ++i)
+        {
+            UTextBlock* Item = MakeText(HC::White, 1.69f);
+            Item->SetText(FText::FromString(PauseLabels[i]));
+            PlaceAt(Inner, Item, {36.f, PItemY[i]}, {500.f, 44.f});
+            PauseMenuItems.Add(Item);
+        }
+
+        PlaceAt(Inner, MakeSolidRect(HC::Gray), {20.f, 260.f}, {560.f, 1.f});
+
+        UTextBlock* PHint = MakeText(HC::Gray, 1.1f);
+        PHint->SetText(FText::FromString(TEXT("[UP/DOWN] Navigate    [ENTER] Select    [ESC] Resume")));
+        PlaceAt(Inner, PHint, {0.f, 275.f}, {560.f, 28.f}, {0.5f, 0.f}, {0.5f, 0.f});
+    }
+
+    // ── Controls Panel (centered 660×440, 1.3× scale) ────────
+    {
+        PanelControls = WidgetTree->ConstructWidget<UCanvasPanel>(UCanvasPanel::StaticClass());
+        UCanvasPanelSlot* S = Root->AddChildToCanvas(PanelControls);
+        S->SetAnchors(FAnchors(0.f, 0.f, 1.f, 1.f));
+        S->SetOffsets(FMargin(0.f));
+        PanelControls->SetVisibility(ESlateVisibility::Collapsed);
+
+        AddStretchBg(PanelControls, FLinearColor(0.f, 0.f, 0.f, 0.80f));
+
+        UCanvasPanel* Inner = WidgetTree->ConstructWidget<UCanvasPanel>(UCanvasPanel::StaticClass());
+        PlaceAt(PanelControls, Inner, {0.f, 0.f}, {660.f, 480.f}, {0.5f, 0.5f}, {0.5f, 0.5f});
+
+        AddStretchBg(Inner, FLinearColor(0.f, 0.02f, 0.05f, 0.97f));
+        auto CBorder = [&](FVector2D Pos, FVector2D Sz) { PlaceAt(Inner, MakeSolidRect(HC::Cyan), Pos, Sz); };
+        CBorder({0.f,   0.f  }, {660.f, 2.f  });
+        CBorder({0.f,   478.f}, {660.f, 2.f  });
+        CBorder({0.f,   0.f  }, {2.f,   480.f});
+        CBorder({658.f, 0.f  }, {2.f,   480.f});
+
+        UTextBlock* CTitle = MakeText(HC::Cyan, 2.2f);
+        CTitle->SetText(FText::FromString(TEXT("Controls")));
+        PlaceAt(Inner, CTitle, {0.f, 20.f}, {240.f, 58.f}, {0.5f, 0.f}, {0.5f, 0.f});
+
+        PlaceAt(Inner, MakeSolidRect(HC::Cyan), {20.f, 84.f}, {620.f, 1.f});
+
+        struct FRow { const TCHAR* Key; const TCHAR* Desc; };
+        static const FRow Rows[] = {
+            { TEXT("WASD"),           TEXT("Move")               },
+            { TEXT("Mouse"),          TEXT("Camera")             },
+            { TEXT("LMB"),            TEXT("Fire")               },
+            { TEXT("E"),              TEXT("Board / Exit Turret") },
+            { TEXT("F"),              TEXT("Wave Ready / Start")  },
+            { TEXT("TAB"),            TEXT("Next Wave")           },
+            { TEXT("UP / DOWN"),      TEXT("Navigate Menu / Shop")},
+            { TEXT("ENTER"),          TEXT("Confirm / Buy")       },
+            { TEXT("R"),              TEXT("Restart (Game Over)") },
+            { TEXT("ESC"),            TEXT("Pause / Quit")        },
+        };
+        constexpr float CRowH = 31.f, CStartY = 100.f;
+        constexpr float ColKey = 40.f, ColDesc = 290.f;
+        for (int32 i = 0; i < UE_ARRAY_COUNT(Rows); ++i)
+        {
+            const float Y = CStartY + i * CRowH;
+            UTextBlock* K = MakeText(HC::Cyan,  1.05f);
+            K->SetText(FText::FromString(Rows[i].Key));
+            PlaceAt(Inner, K, {ColKey,  Y}, {230.f, CRowH});
+
+            UTextBlock* D = MakeText(HC::White, 1.05f);
+            D->SetText(FText::FromString(Rows[i].Desc));
+            PlaceAt(Inner, D, {ColDesc, Y}, {350.f, CRowH});
+        }
+        const float ListEnd = CStartY + UE_ARRAY_COUNT(Rows) * CRowH;
+
+        PlaceAt(Inner, MakeSolidRect(HC::Gray), {20.f, ListEnd + 8.f}, {620.f, 1.f});
+
+        UTextBlock* CBack = MakeText(HC::Gray, 1.1f);
+        CBack->SetText(FText::FromString(TEXT("[ESC / ENTER]  Back")));
+        PlaceAt(Inner, CBack, {0.f, ListEnd + 16.f}, {300.f, 28.f}, {0.5f, 0.f}, {0.5f, 0.f});
+    }
 }
 
 void UNeonHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -189,6 +337,48 @@ void UNeonHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
     ANeonGameMode* GM = Cast<ANeonGameMode>(UGameplayStatics::GetGameMode(this));
     if (!GM) return;
+
+    ANeonPlayerController* NPC = Cast<ANeonPlayerController>(GetOwningPlayer());
+    const int32 MenuCursor = NPC ? NPC->MenuCursorIndex : 0;
+    const bool  bCtrlPanel = NPC && NPC->bShowControlsPanel;
+
+    auto VisIf = [](bool b) { return b ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed; };
+
+    // Main menu overlay — covers everything, skip the rest of the HUD
+    if (GM->Phase == EGamePhase::MainMenu)
+    {
+        PanelMainMenu->SetVisibility(ESlateVisibility::HitTestInvisible);
+        PanelPause->SetVisibility(ESlateVisibility::Collapsed);
+        PanelControls->SetVisibility(VisIf(bCtrlPanel));
+
+        static const TCHAR* Labels[] = { TEXT("Start Game"), TEXT("Controls"), TEXT("Quit") };
+        for (int32 i = 0; i < MainMenuItems.Num(); ++i)
+        {
+            const bool bSel = (!bCtrlPanel && i == MenuCursor);
+            MainMenuItems[i]->SetText(FText::FromString(
+                FString::Printf(TEXT("%s %s"), bSel ? TEXT(">") : TEXT(" "), Labels[i])));
+            MainMenuItems[i]->SetColorAndOpacity(FSlateColor(bSel ? HC::Cyan : HC::White));
+        }
+        return;
+    }
+    PanelMainMenu->SetVisibility(ESlateVisibility::Collapsed);
+
+    // Pause overlay
+    const bool bPaused = NPC && NPC->bPauseMenuOpen;
+    PanelPause->SetVisibility(VisIf(bPaused));
+    PanelControls->SetVisibility(VisIf(bCtrlPanel));
+
+    if (bPaused)
+    {
+        static const TCHAR* PLabels[] = { TEXT("Resume"), TEXT("Controls"), TEXT("Quit Game") };
+        for (int32 i = 0; i < PauseMenuItems.Num(); ++i)
+        {
+            const bool bSel = (!bCtrlPanel && i == MenuCursor);
+            PauseMenuItems[i]->SetText(FText::FromString(
+                FString::Printf(TEXT("%s %s"), bSel ? TEXT(">") : TEXT(" "), PLabels[i])));
+            PauseMenuItems[i]->SetColorAndOpacity(FSlateColor(bSel ? HC::Cyan : HC::White));
+        }
+    }
 
     // Resources
     TxtResources->SetText(FText::FromString(
@@ -214,7 +404,7 @@ void UNeonHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
     {
     case EGamePhase::PreWave:
         TxtPhase->SetText(FText::FromString(
-            FString::Printf(TEXT("Wave %d — Press [F] to start gathering"), GM->WaveIndex + 1)));
+            FString::Printf(TEXT("Wave %d — Starting in %ds"), GM->WaveIndex + 1, FMath::CeilToInt(GM->PreWaveTimer))));
         TxtPhase->SetColorAndOpacity(FSlateColor(HC::Cyan));
         bCenter = true;
         break;

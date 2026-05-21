@@ -41,6 +41,13 @@ private:
     UTextBlock*       TxtGameState = nullptr;  // GameOver, Victory (center, large)
     UTextBlock*       TxtRestart   = nullptr;
 
+    // Main menu / pause / controls overlays
+    UCanvasPanel*         PanelMainMenu  = nullptr;
+    UCanvasPanel*         PanelPause     = nullptr;
+    UCanvasPanel*         PanelControls  = nullptr;
+    TArray<UTextBlock*>   MainMenuItems;
+    TArray<UTextBlock*>   PauseMenuItems;
+
     // Shop panel
     UCanvasPanel*     PanelShop    = nullptr;
     UTextBlock*       TxtShopRes   = nullptr;
