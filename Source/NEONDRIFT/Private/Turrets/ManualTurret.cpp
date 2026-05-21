@@ -112,7 +112,10 @@ void AManualTurret::Fire()
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(this);
 
-    if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
+    bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
+    FVector LineEnd = bHit ? Hit.ImpactPoint : End;
+    DrawDebugLine(GetWorld(), Start, LineEnd, FColor::Orange, false, 0.05f, 0, 2.f);
+    if (bHit)
     {
         DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.f, 6, FColor::Orange, false, 0.15f);
         if (IDamageable* D = Cast<IDamageable>(Hit.GetActor()))

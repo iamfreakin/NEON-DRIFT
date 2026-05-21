@@ -1,4 +1,5 @@
 #include "Monster.h"
+#include "DrawDebugHelpers.h"
 #include "NeonBase.h"
 #include "NeonGameMode.h"
 #include "Components/StaticMeshComponent.h"
@@ -63,6 +64,7 @@ void AMonster::Tick(float DeltaTime)
         if (AttackSoundCooldown <= 0.f)
         {
             AttackSoundCooldown = 1.5f;
+            DrawDebugLine(GetWorld(), GetActorLocation(), Base->GetActorLocation(), FColor::Red, false, 0.3f, 0, 2.f);
             if (ANeonGameMode* GM = GameModeRef.Get())
                 if (GM->MonsterAttackSound)
                     UGameplayStatics::SpawnSoundAtLocation(this, GM->MonsterAttackSound, GetActorLocation());

@@ -1,4 +1,5 @@
 #include "AutoTurret.h"
+#include "DrawDebugHelpers.h"
 #include "Monster.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
@@ -112,6 +113,7 @@ void AAutoTurret::FireAtTarget()
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(this);
 
+    DrawDebugLine(GetWorld(), Start, End, FColor::Purple, false, 0.05f, 0, 2.f);
     if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
     {
         if (IDamageable* D = Cast<IDamageable>(Hit.GetActor()))
