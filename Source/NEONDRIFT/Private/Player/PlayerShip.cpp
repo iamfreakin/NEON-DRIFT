@@ -111,8 +111,10 @@ void APlayerShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
     EIC->BindAction(PC->IA_MoveForward, ETriggerEvent::Completed, this, &APlayerShip::OnMoveForward);
     EIC->BindAction(PC->IA_MoveRight,   ETriggerEvent::Triggered, this, &APlayerShip::OnMoveRight);
     EIC->BindAction(PC->IA_MoveRight,   ETriggerEvent::Completed, this, &APlayerShip::OnMoveRight);
-    EIC->BindAction(PC->IA_Thrust,      ETriggerEvent::Triggered, this, &APlayerShip::OnThrust);
-    EIC->BindAction(PC->IA_Thrust,      ETriggerEvent::Completed, this, &APlayerShip::OnThrust);
+    EIC->BindAction(PC->IA_ThrustUp,    ETriggerEvent::Triggered, this, &APlayerShip::OnThrustUp);
+    EIC->BindAction(PC->IA_ThrustUp,    ETriggerEvent::Completed, this, &APlayerShip::OnThrustUp);
+    EIC->BindAction(PC->IA_ThrustDown,  ETriggerEvent::Triggered, this, &APlayerShip::OnThrustDown);
+    EIC->BindAction(PC->IA_ThrustDown,  ETriggerEvent::Completed, this, &APlayerShip::OnThrustDown);
     EIC->BindAction(PC->IA_Look,        ETriggerEvent::Triggered, this, &APlayerShip::OnLook);
     EIC->BindAction(PC->IA_Fire,        ETriggerEvent::Started,   this, &APlayerShip::StartFire);
     EIC->BindAction(PC->IA_Fire,        ETriggerEvent::Completed, this, &APlayerShip::StopFire);
@@ -178,11 +180,12 @@ void APlayerShip::Tick(float DeltaTime)
 
     // --- Flight physics (hover-craft: no gravity, uniform drag on all axes) ---
     FRotator ControlRot = GetControlRotation();
-    FVector  FwdXY      = FRotator(0, ControlRot.Yaw, 0).Vector();
-    FVector  RightXY    = FVector::CrossProduct(FVector::UpVector, FwdXY);
+    FVector  Fwd        = FRotationMatrix(ControlRot).GetScaledAxis(EAxis::X);
+    FVector  Right      = FRotationMatrix(ControlRot).GetScaledAxis(EAxis::Y);
 
-    FVector InputDir = FwdXY * MoveForwardInput + RightXY * MoveRightInput;
+    FVector InputDir = Fwd * MoveForwardInput + Right * MoveRightInput;
     if (!InputDir.IsNearlyZero()) InputDir.Normalize();
+    InputDir.Z *= 2.f;
 
     FVector Accel = (InputDir + FVector::UpVector * ThrustInput) * Stats.Acceleration;
     Velocity += Accel * DeltaTime;
@@ -235,9 +238,15 @@ void APlayerShip::Tick(float DeltaTime)
 
 void APlayerShip::OnMoveForward(const FInputActionValue& Value) { MoveForwardInput = Value.Get<float>(); }
 void APlayerShip::OnMoveRight  (const FInputActionValue& Value) { MoveRightInput   = Value.Get<float>(); }
-void APlayerShip::OnThrust     (const FInputActionValue& Value)
+void APlayerShip::OnThrustUp(const FInputActionValue& Value)
 {
-    ThrustInput = FMath::Clamp(Value.Get<float>(), -1.f, 1.f);
+    bThrustUp   = Value.Get<bool>();
+    ThrustInput = bThrustUp ? 1.f : (bThrustDown ? -1.f : 0.f);
+}
+void APlayerShip::OnThrustDown(const FInputActionValue& Value)
+{
+    bThrustDown = Value.Get<bool>();
+    ThrustInput = bThrustDown ? -1.f : (bThrustUp ? 1.f : 0.f);
 }
 
 void APlayerShip::OnLook(const FInputActionValue& Value)

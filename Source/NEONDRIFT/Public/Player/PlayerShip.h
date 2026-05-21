@@ -32,7 +32,8 @@ public:
     // Input handlers (called by EIC bindings)
     void OnMoveForward(const FInputActionValue& Value);
     void OnMoveRight  (const FInputActionValue& Value);
-    void OnThrust     (const FInputActionValue& Value);
+    void OnThrustUp  (const FInputActionValue& Value);
+    void OnThrustDown(const FInputActionValue& Value);
     void OnLook       (const FInputActionValue& Value);
     void StartFire    (const FInputActionValue& Value);
     void StopFire     (const FInputActionValue& Value);
@@ -55,6 +56,8 @@ private:
     float   MoveForwardInput = 0.f;
     float   MoveRightInput   = 0.f;
     float   ThrustInput      = 0.f;
+    bool    bThrustUp        = false;
+    bool    bThrustDown      = false;
     bool    bFiring          = false;
     float   FireCooldown     = 0.f;
 

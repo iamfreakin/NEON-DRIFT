@@ -50,7 +50,8 @@ void ANeonPlayerController::BuildIMC()
 
     IA_MoveForward = Make1DAction(this, IMC, EKeys::W, EKeys::S, TEXT("IA_MoveForward"));
     IA_MoveRight   = Make1DAction(this, IMC, EKeys::D, EKeys::A, TEXT("IA_MoveRight"));
-    IA_Thrust      = Make1DAction(this, IMC, EKeys::SpaceBar, EKeys::LeftShift, TEXT("IA_Thrust"));
+    IA_ThrustUp   = MakeBoolAction(this, IMC, EKeys::SpaceBar,   TEXT("IA_ThrustUp"));
+    IA_ThrustDown = MakeBoolAction(this, IMC, EKeys::C,          TEXT("IA_ThrustDown"));
 
     // Look (Mouse2D → Axis2D)
     IA_Look = NewObject<UInputAction>(this, TEXT("IA_Look"));

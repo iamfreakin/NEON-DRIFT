@@ -19,7 +19,8 @@ public:
     UPROPERTY() UInputMappingContext* IMC           = nullptr;
     UPROPERTY() UInputAction*         IA_MoveForward = nullptr;
     UPROPERTY() UInputAction*         IA_MoveRight   = nullptr;
-    UPROPERTY() UInputAction*         IA_Thrust      = nullptr;
+    UPROPERTY() UInputAction*         IA_ThrustUp    = nullptr;
+    UPROPERTY() UInputAction*         IA_ThrustDown  = nullptr;
     UPROPERTY() UInputAction*         IA_Look        = nullptr;
     UPROPERTY() UInputAction*         IA_Fire        = nullptr;
     UPROPERTY() UInputAction*         IA_Ready       = nullptr;
