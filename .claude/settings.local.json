@@ -15,7 +15,9 @@
       "Bash(Remove-Item \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\Source\\\\NEONDRIFT\\\\Public\\\\Actors\\\\NeonHitShake.h\" -Force)",
       "Bash(Remove-Item \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\Source\\\\NEONDRIFT\\\\Private\\\\Actors\\\\NeonHitShake.cpp\" -Force)",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\Source\\\\NEONDRIFT\" -Recurse -Filter \"*.h\" -o File)",
-      "Bash(Select-Object FullName)"
+      "Bash(Select-Object FullName)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -First 60)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Epic Games\\\\UE_5.8\\\\Engine\\\\Build\\\\BatchFiles\\\\Build.bat\" NEONDRIFT Win64 Development \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\NEONDRIFT.uproject\" -waitmutex 2>&1 | Select-Object -Last 5)"
     ]
   }
 }

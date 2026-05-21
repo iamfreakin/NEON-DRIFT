@@ -25,7 +25,7 @@ void ANeonHUD::BeginPlay()
 }
 
 static void DrawWorldBar(AHUD* HUD, APlayerController* PC,
-                         FVector WorldLoc, float Fraction, FLinearColor Color, float ZOffset = 120.f)
+                            FVector WorldLoc, float Fraction, FLinearColor Color, float ZOffset = 120.f)
 {
     FVector2D Screen;
     if (!PC->ProjectWorldLocationToScreen(WorldLoc + FVector(0.f, 0.f, ZOffset), Screen, true))
@@ -50,12 +50,12 @@ void ANeonHUD::DrawHUD()
     // --- World-space HP bars ---
     for (TActorIterator<AMonster> It(GetWorld()); It; ++It)
         DrawWorldBar(this, PC, It->GetActorLocation(),
-                     It->MaxHP > 0.f ? It->HP / It->MaxHP : 0.f,
-                     FLinearColor(1.f, 0.1f, 0.4f));
+                    It->MaxHP > 0.f ? It->HP / It->MaxHP : 0.f,
+                    FLinearColor(1.f, 0.1f, 0.4f));
 
     for (TActorIterator<AResourceBlock> It(GetWorld()); It; ++It)
         DrawWorldBar(this, PC, It->GetActorLocation(),
-                     It->GetHPFraction(), It->GetBarColor(), 80.f);
+                    It->GetHPFraction(), It->GetBarColor(), 80.f);
 
     // --- Turret dual-crosshair ---
     ANeonPlayerController* NeonPC = Cast<ANeonPlayerController>(PC);
@@ -70,7 +70,7 @@ void ANeonHUD::DrawHUD()
     DrawLine(CX, CY + Gap, CX, CY + Len, FLinearColor::White, 1.5f);
 
     FVector BarrelTip = NeonPC->PlayerCameraManager->GetCameraLocation()
-                      + NeonPC->BoardedTurret->GetBarrelForward() * 8000.f;
+                        + NeonPC->BoardedTurret->GetBarrelForward() * 8000.f;
     FVector2D DotScreen;
     if (NeonPC->ProjectWorldLocationToScreen(BarrelTip, DotScreen))
     {
