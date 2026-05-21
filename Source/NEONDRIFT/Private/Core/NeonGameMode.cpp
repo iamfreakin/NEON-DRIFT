@@ -296,10 +296,12 @@ void ANeonGameMode::SpawnResourceField()
             if (Roll <= Acc) { Chosen = &BD; break; }
         }
 
-        // Random ring position
+        // Random ring position - area-uniform radius so blocks don't cluster at inner ring
         float Angle  = FMath::FRandRange(0.f, 2.f * PI);
-        float Radius = FMath::FRandRange(BlockSpawnMinRadius, BlockSpawnRadius);
-        float Z      = Center.Z + BlockSpawnHeight + FMath::FRandRange(0.f, 300.f);
+        float MinR2  = BlockSpawnMinRadius * BlockSpawnMinRadius;
+        float MaxR2  = BlockSpawnRadius    * BlockSpawnRadius;
+        float Radius = FMath::Sqrt(FMath::FRand() * (MaxR2 - MinR2) + MinR2);
+        float Z      = Center.Z + BlockSpawnHeight + FMath::FRandRange(-200.f, 600.f);
         FVector Loc  = FVector(Center.X + FMath::Cos(Angle) * Radius, 
                                 Center.Y + FMath::Sin(Angle) * Radius, Z);
 

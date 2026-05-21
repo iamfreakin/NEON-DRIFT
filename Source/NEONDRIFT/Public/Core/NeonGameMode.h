@@ -53,9 +53,9 @@ public:
 
     // ---- Spawn config ----
     UPROPERTY(EditDefaultsOnly, Category="BlockData") int32 TotalBlocksToSpawn  = 40;
-    UPROPERTY(EditDefaultsOnly, Category="BlockData") float BlockSpawnRadius     = 5000.f;
-    UPROPERTY(EditDefaultsOnly, Category="BlockData") float BlockSpawnMinRadius  = 1200.f;
-    UPROPERTY(EditDefaultsOnly, Category="BlockData") float BlockSpawnHeight     = 700.f;
+    UPROPERTY(EditDefaultsOnly, Category="BlockData") float BlockSpawnRadius     = 8000.f;
+    UPROPERTY(EditDefaultsOnly, Category="BlockData") float BlockSpawnMinRadius  = 2500.f;
+    UPROPERTY(EditDefaultsOnly, Category="BlockData") float BlockSpawnHeight     = 1200.f;
     UPROPERTY(EditDefaultsOnly, Category="WaveData")  float SpawnDistance        = 8000.f;
     UPROPERTY(EditDefaultsOnly, Category="WaveData")  float MonsterSpawnHeight   = 500.f;
 
