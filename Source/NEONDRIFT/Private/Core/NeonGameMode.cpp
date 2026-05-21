@@ -231,9 +231,16 @@ void ANeonGameMode::SpawnMonsterAtEntrance(int32 EntranceIdx)
 {
     const FWaveDef& W = WaveTable[WaveIndex];
     ESpawnDir Dir     = W.Entrances[EntranceIdx];
-    FVector   Loc     = GetSpawnLocation(Dir);
-    // Override Z so monsters always spawn above ground regardless of SpawnPoint placement
-    Loc.Z = (Base ? Base->GetActorLocation().Z : 0.f) + MonsterSpawnHeight;
+    FVector Loc = GetSpawnLocation(Dir);
+
+    // 입구 수직 방향으로 랜덤 산포 (기지 방향 벡터 기준, 평면형 배치)
+    if (Base)
+    {
+        FVector ToBase = (Base->GetActorLocation() - Loc).GetSafeNormal();
+        FVector Perp   = FVector::CrossProduct(ToBase, FVector::UpVector).GetSafeNormal();
+        Loc += Perp * FMath::FRandRange(-1500.f, 1500.f);
+    }
+    Loc.Z = (Base ? Base->GetActorLocation().Z : 0.f) + MonsterSpawnHeight + FMath::FRandRange(-100.f, 400.f);
 
     AMonster* M = GetWorld()->SpawnActor<AMonster>(AMonster::StaticClass(), Loc, FRotator::ZeroRotator);
     if (!M) return;
