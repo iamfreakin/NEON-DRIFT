@@ -28,7 +28,8 @@
       "Skill(anthropic-skills:docx)",
       "Skill(anthropic-skills:docx:*)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(dir \"C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\" /b)"
     ]
   }
 }
