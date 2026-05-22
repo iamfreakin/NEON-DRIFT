@@ -10,7 +10,6 @@ DerivedDataCache/
 
 # 저장/임시 파일
 Saved/
-Docs/
 
 # Visual Studio
 .vs/
@@ -35,6 +34,7 @@ FileOpenOrder/
 # 패키징 결과물
 Releases/
 Packages/
+Windows/
 
 # OS 파일
 .DS_Store
