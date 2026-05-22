@@ -68,6 +68,13 @@ void ANeonPlayerController::BuildIMC()
     IA_Restart     = MakeBoolAction(this, IMC, EKeys::R,               TEXT("IA_Restart"));
     IA_Interact    = MakeBoolAction(this, IMC, EKeys::E,               TEXT("IA_Interact"));
     IA_Escape      = MakeBoolAction(this, IMC, EKeys::Escape,          TEXT("IA_Escape"));
+    IMC->MapKey(IA_Escape, EKeys::I); // TODO: 패키징 전 제거 (에디터 테스트용)
+
+    // 일시정지 중에도 메뉴 조작이 가능하도록 설정
+    IA_Escape->bTriggerWhenPaused     = true;
+    IA_ShopUp->bTriggerWhenPaused     = true;
+    IA_ShopDown->bTriggerWhenPaused   = true;
+    IA_ShopConfirm->bTriggerWhenPaused = true;
 
     if (UEnhancedInputLocalPlayerSubsystem* Sub =
         ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
