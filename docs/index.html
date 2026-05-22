@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEON DRIFT — 호버바이크 웨이브 디펜스</title>
+  <meta name="description" content="UE5 C++로 3일 만에 스크래치 제작한 호버바이크 웨이브 디펜스 게임. 비행 · 자원 채집 · 포탑 방어." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="scanline" aria-hidden="true"></div>
+
+  <!-- ===================== NAV ===================== -->
+  <nav class="nav">
+    <a href="#top" class="nav__logo">NEON<span>DRIFT</span></a>
+    <div class="nav__links">
+      <a href="#features">메커닉</a>
+      <a href="#tech">기술 스택</a>
+      <a href="#docs">문서</a>
+      <a href="https://github.com/iamfreakin/NEON-DRIFT" target="_blank" rel="noopener" class="nav__cta">GitHub</a>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <header id="top" class="hero">
+    <div class="hero__inner">
+      <p class="hero__kicker">UNREAL ENGINE 5 · C++ · ARCADE WAVE DEFENSE</p>
+      <h1 class="hero__title" data-text="NEON DRIFT">NEON DRIFT</h1>
+      <p class="hero__tagline">중력 없는 호버바이크로 자원을 긁어모으고, 사방에서 밀려오는 적을 막아내라.</p>
+      <p class="hero__desc">
+        UE 5.8 C++ 블랭크 템플릿에서 시작해 <strong>3일 스프린트</strong>로 완성한 웨이브 디펜스 게임.
+        비행 조작, 자석 자원 채집, 포탑 탑승 방어, 강화 상점까지 — 모든 게임플레이가 순수 C++로 작성됐다.
+      </p>
+      <div class="hero__actions">
+        <a href="https://github.com/iamfreakin/NEON-DRIFT" target="_blank" rel="noopener" class="btn btn--primary">소스 코드 보기</a>
+        <a href="#features" class="btn btn--ghost">메커닉 살펴보기</a>
+      </div>
+      <ul class="hero__stats">
+        <li><span class="num">3</span><span class="lbl">일 스프린트</span></li>
+        <li><span class="num">5</span><span class="lbl">웨이브</span></li>
+        <li><span class="num">8</span><span class="lbl">강화 항목</span></li>
+        <li><span class="num">100%</span><span class="lbl">C++ 작성</span></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================== INTRO ===================== -->
+    <section class="section section--intro">
+      <div class="section__head">
+        <span class="eyebrow">// THE GAME</span>
+        <h2>한 줄로 끝나지 않는 루프</h2>
+      </div>
+      <p class="intro__lead">
+        NEON DRIFT는 <strong>채집 → 전투 → 강화</strong>가 맞물려 돌아가는 아케이드 웨이브 디펜스다.
+        준비 단계에서 호버바이크를 몰아 필드의 자원 블록을 부수고, 전투 단계에서 기지 포탑에 올라
+        밀려오는 적을 막는다. 살아남은 자원으로 기체와 포탑을 강화하며 5웨이브 끝까지 버틴다.
+      </p>
+      <div class="phase-flow">
+        <div class="phase"><span class="phase__no">01</span><h3>GATHER</h3><p>호버바이크로 비행하며 자원 블록을 파괴하고 자석으로 부스러기를 흡수한다.</p></div>
+        <div class="phase__arrow" aria-hidden="true">▸</div>
+        <div class="phase"><span class="phase__no">02</span><h3>COMBAT</h3><p>수동 포탑에 탑승해 N·E·S·W 입구로 밀려오는 적의 파도를 막아낸다.</p></div>
+        <div class="phase__arrow" aria-hidden="true">▸</div>
+        <div class="phase"><span class="phase__no">03</span><h3>SHOP</h3><p>모은 자원으로 기체·포탑 8종 강화를 구매하고 다음 웨이브로.</p></div>
+      </div>
+    </section>
+
+    <!-- ===================== FEATURES ===================== -->
+    <section id="features" class="section">
+      <div class="section__head">
+        <span class="eyebrow">// CORE MECHANICS</span>
+        <h2>핵심 메커닉</h2>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <div class="card__icon">✦</div>
+          <h3>호버바이크 비행</h3>
+          <p>중력 없는 6DOF 이동. 지수 감속(드래그)과 자동 호버로 미끄러지는 관성감을 구현했다. 속도에 따라 FOV가 70°→110°로 보간돼 가속감을 강조한다.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">◎</div>
+          <h3>자석 자원 채집</h3>
+          <p>블록을 파괴하면 부스러기가 떨어지고, 자석 범위 안에 들어오면 호밍 가속으로 빨려든다. 강화로 자석 반경이 늘어난다.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">▣</div>
+          <h3>공격력 게이트 블록</h3>
+          <p>Gold·Iron·Diamond 3종 자원 블록. 기체 공격력이 블록의 RequiredPower에 못 미치면 스파크만 튀고 파괴되지 않는다 — 강화를 강제하는 진행 장치.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">⊕</div>
+          <h3>포탑 탑승 전투</h3>
+          <p>E 키로 기지 수동 포탑에 탑승. 회전 속도가 제한돼 조준에 무게감이 있다. 카메라/포신 두 갈래 조준점으로 탄착을 읽는다.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">⟁</div>
+          <h3>웨이브 디펜스</h3>
+          <p>5웨이브 5/10/15/20/30마리. 후반엔 4방향 입구에서 동시 스폰. 적은 기지에 도달하면 원거리에서 지속 피해를 가한다.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">↟</div>
+          <h3>강화 상점</h3>
+          <p>기체와 포탑 통합 8종 강화 — 자석·공격력·속도·HP·포탑 회전·연사·자동포탑 수. 웨이브 사이 자원으로 단계별 구매.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== TECH ===================== -->
+    <section id="tech" class="section section--tech">
+      <div class="section__head">
+        <span class="eyebrow">// UNDER THE HOOD</span>
+        <h2>기술 스택 &amp; 개발 정보</h2>
+      </div>
+      <p class="intro__lead">
+        에디터에서 만드는 에셋을 최소화하고 게임플레이 전체를 C++로 작성하는 것을 설계 원칙으로 삼았다.
+        입력·UI·머티리얼 제어까지 코드로 다뤄 CLI 빌드만으로 검증 가능한 구조를 만들었다.
+      </p>
+      <div class="tech-grid">
+        <div class="tech">
+          <h3>Enhanced Input — 코드 생성</h3>
+          <p>InputMappingContext / InputAction을 <code>.uasset</code> 없이 PlayerController에서 <code>NewObject</code> + <code>MapKey</code>로 구성. 입력 에셋 0개.</p>
+        </div>
+        <div class="tech">
+          <h3>Canvas HUD — 순수 C++</h3>
+          <p>UMG 위젯 없이 <code>AHUD::DrawHUD()</code> Canvas 드로잉으로 자원·HP 바·웨이브·상점·포탑 조준점까지 전부 구현.</p>
+        </div>
+        <div class="tech">
+          <h3>상태머신 게임 루프</h3>
+          <p>PreWave→Gather→Combat→Shop→Victory/GameOver 7상태 전이를 GameMode가 관리. 웨이브 스폰 펌프와 자원 카운트 통합.</p>
+        </div>
+        <div class="tech">
+          <h3>IDamageable 인터페이스</h3>
+          <p>블록·몬스터·기지가 공통 <code>TakeHit(Damage, AttackerPower)</code>를 구현. 라인트레이스가 맞은 액터에 인터페이스 캐스트로 피해 전달.</p>
+        </div>
+        <div class="tech">
+          <h3>Dynamic Material Instance</h3>
+          <p>네온 부모 머티리얼 1개만 수동 제작. 색·발광·피격 플래시는 전부 C++ MID 파라미터로 런타임 제어.</p>
+        </div>
+        <div class="tech">
+          <h3>Niagara 트레일 &amp; 폴리시</h3>
+          <p>기체·몬스터 파티클 트레일, 카메라 셰이크, 네온 펄스 등 시각 피드백을 코드 측에서 연결.</p>
+        </div>
+      </div>
+      <ul class="tech-tags">
+        <li>Unreal Engine 5.8</li>
+        <li>C++20</li>
+        <li>Enhanced Input</li>
+        <li>Niagara</li>
+        <li>UBT / CLI Build</li>
+        <li>BuildSettingsVersion V7</li>
+      </ul>
+    </section>
+
+    <!-- ===================== DOCS ===================== -->
+    <section id="docs" class="section section--docs">
+      <div class="section__head">
+        <span class="eyebrow">// RESOURCES</span>
+        <h2>문서 &amp; 링크</h2>
+      </div>
+      <div class="doc-links">
+        <a class="doc" href="NEONDRIFT_기획서.pdf" target="_blank" rel="noopener">
+          <span class="doc__tag">PDF</span><h3>게임 기획서</h3><p>제출용 상세 기획 문서</p>
+        </a>
+        <a class="doc" href="NEONDRIFT_발표자료.pdf" target="_blank" rel="noopener">
+          <span class="doc__tag">PDF</span><h3>발표 자료</h3><p>프로젝트 발표 슬라이드</p>
+        </a>
+        <a class="doc" href="NEON_DRIFT_PLAN.md" target="_blank" rel="noopener">
+          <span class="doc__tag">MD</span><h3>구현 설계서</h3><p>아키텍처 · 클래스 · 데이터 테이블</p>
+        </a>
+        <a class="doc" href="https://github.com/iamfreakin/NEON-DRIFT" target="_blank" rel="noopener">
+          <span class="doc__tag">REPO</span><h3>소스 코드</h3><p>GitHub 저장소 전체</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <p class="footer__logo">NEON<span>DRIFT</span></p>
+    <p class="footer__meta">UE5 C++ Arcade Wave Defense · 3-Day Sprint Project</p>
+    <p class="footer__copy">© 2026 · <a href="https://github.com/iamfreakin" target="_blank" rel="noopener">iamfreakin</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
