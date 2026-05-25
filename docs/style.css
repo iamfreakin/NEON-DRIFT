@@ -915,6 +915,186 @@ kbd {
 .footer__copy { color: var(--text-dim); font-size: 0.88rem; }
 .footer__copy a { color: var(--cyan); }
 
+/* ===================== TARGETING MINI-GAME ===================== */
+.targeting {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 90;
+  width: 220px;
+  padding: 14px 14px 12px;
+  background: rgba(11, 13, 24, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.targeting.active {
+  border-color: var(--magenta);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 24px rgba(255,47,208,0.25);
+}
+.targeting__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--magenta);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.targeting__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--magenta);
+  box-shadow: 0 0 8px var(--magenta);
+  animation: blink 1.4s ease-in-out infinite;
+}
+.targeting.active .targeting__dot {
+  background: #3bff8a;
+  box-shadow: 0 0 8px #3bff8a;
+  animation-duration: 0.7s;
+}
+.targeting__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.targeting__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+.targeting__lbl {
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+}
+.targeting__val {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: var(--cyan);
+  line-height: 1;
+}
+.targeting__btn {
+  width: 100%;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 9px;
+  background: transparent;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.targeting__btn:hover {
+  background: var(--cyan);
+  color: var(--bg);
+  box-shadow: 0 0 12px var(--cyan);
+}
+.targeting.active .targeting__btn {
+  border-color: var(--magenta);
+  color: var(--magenta);
+  pointer-events: none;
+}
+.targeting__hint {
+  font-size: 0.62rem;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* targets */
+.target {
+  position: fixed;
+  width: 56px; height: 56px;
+  pointer-events: auto;
+  z-index: 80;
+  color: var(--cyan);
+  animation: targetAppear 0.22s ease-out;
+  cursor: crosshair;
+}
+.target::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  box-shadow: 0 0 16px currentColor, inset 0 0 8px currentColor;
+  animation: targetPulse 0.9s ease-in-out infinite;
+}
+.target::after {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.6;
+}
+.target svg {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.target--mag { color: var(--magenta); }
+.target--orng { color: var(--orange); }
+
+.target.hit { animation: targetHit 0.45s ease-out forwards; pointer-events: none; }
+.target.miss { animation: targetMiss 0.35s ease-in forwards; pointer-events: none; }
+
+@keyframes targetAppear {
+  from { transform: scale(0.3); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+@keyframes targetPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.1); }
+}
+@keyframes targetHit {
+  to {
+    transform: scale(2.4);
+    opacity: 0;
+    box-shadow: 0 0 40px currentColor;
+  }
+}
+@keyframes targetMiss {
+  to { opacity: 0; transform: scale(0.6); }
+}
+
+.target__score {
+  position: fixed;
+  z-index: 81;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: var(--cyan);
+  text-shadow: 0 0 12px currentColor;
+  pointer-events: none;
+  animation: floatScore 0.8s ease-out forwards;
+}
+.target__score--mag  { color: var(--magenta); }
+.target__score--orng { color: var(--orange); }
+@keyframes floatScore {
+  from { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(-32px); opacity: 0; }
+}
+
+@media (max-width: 720px), (hover: none) {
+  .targeting { display: none; }
+}
+
 /* ===================== REVEAL ===================== */
 [data-reveal] {
   opacity: 0;

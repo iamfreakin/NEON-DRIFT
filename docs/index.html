@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
   <div class="grid-bg" aria-hidden="true"></div>
@@ -253,12 +253,27 @@
     </div>
   </div>
 
+  <!-- TARGETING HUD (mini-game) -->
+  <aside class="targeting" id="targeting">
+    <div class="targeting__head">
+      <span class="targeting__dot"></span>
+      <span class="targeting__title">TARGETING SYS</span>
+    </div>
+    <div class="targeting__stats">
+      <div class="targeting__stat"><span class="targeting__lbl">SCORE</span><span class="targeting__val" id="ts-score">0000</span></div>
+      <div class="targeting__stat"><span class="targeting__lbl">HITS</span><span class="targeting__val" id="ts-hits">00</span></div>
+      <div class="targeting__stat"><span class="targeting__lbl">ACC</span><span class="targeting__val" id="ts-acc">100%</span></div>
+    </div>
+    <button class="targeting__btn" id="ts-btn" type="button">▶ ENGAGE</button>
+    <p class="targeting__hint" id="ts-hint">화면 타겟 클릭 · 30초</p>
+  </aside>
+
   <!-- FOOTER -->
   <footer class="footer">
     <p class="footer__logo">NEON<span>DRIFT</span></p>
     <p class="footer__copy">© 2026 · <a href="https://github.com/iamfreakin" target="_blank" rel="noopener">iamfreakin</a></p>
   </footer>
 
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=5"></script>
 </body>
 </html>
