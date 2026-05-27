@@ -453,6 +453,55 @@ code {
 .footer__copy { color: var(--text-dim); font-size: 0.88rem; }
 .footer__copy a { color: var(--cyan); }
 
+/* ===================== GIF GALLERY ===================== */
+.gif-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.gif-item {
+  margin: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.gif-item:hover {
+  border-color: var(--cyan);
+  transform: translateY(-3px);
+}
+.gif-item img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+.gif-item figcaption {
+  padding: 14px 16px 16px;
+}
+.gif-item figcaption strong {
+  display: block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--cyan);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.gif-item figcaption span {
+  font-size: 0.92rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+@media (max-width: 900px) {
+  .gif-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 580px) {
+  .gif-grid { grid-template-columns: 1fr; }
+}
+
 /* ===================== REVEAL ANIM ===================== */
 .section, .hero__inner > * {
   --d: 0ms;
