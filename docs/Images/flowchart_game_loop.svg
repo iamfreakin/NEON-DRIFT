@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1060" viewBox="0 0 900 1060">
+<defs>
+<marker id="ah_cyan" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#00f0ff"/></marker>
+<marker id="ah_mag" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#ff2fd0"/></marker>
+<marker id="ah_org" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#ff8a2f"/></marker>
+<marker id="ah_grn" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#2fff8a"/></marker>
+<marker id="ah_gray" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#6677aa"/></marker>
+</defs>
+<rect width="900" height="1060" fill="#0d0d1a"/>
+<line x1="0" y1="0" x2="0" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="50" y1="0" x2="50" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="100" y1="0" x2="100" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="150" y1="0" x2="150" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="200" y1="0" x2="200" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="250" y1="0" x2="250" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="300" y1="0" x2="300" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="350" y1="0" x2="350" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="400" y1="0" x2="400" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="450" y1="0" x2="450" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="500" y1="0" x2="500" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="550" y1="0" x2="550" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="600" y1="0" x2="600" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="650" y1="0" x2="650" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="700" y1="0" x2="700" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="750" y1="0" x2="750" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="800" y1="0" x2="800" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="850" y1="0" x2="850" y2="1060" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="0" x2="900" y2="0" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="50" x2="900" y2="50" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="100" x2="900" y2="100" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="150" x2="900" y2="150" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="200" x2="900" y2="200" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="250" x2="900" y2="250" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="300" x2="900" y2="300" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="350" x2="900" y2="350" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="400" x2="900" y2="400" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="450" x2="900" y2="450" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="500" x2="900" y2="500" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="550" x2="900" y2="550" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="600" x2="900" y2="600" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="650" x2="900" y2="650" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="700" x2="900" y2="700" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="750" x2="900" y2="750" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="800" x2="900" y2="800" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="850" x2="900" y2="850" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="900" x2="900" y2="900" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="950" x2="900" y2="950" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="1000" x2="900" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="1050" x2="900" y2="1050" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<text x="450" y="34" font-family="'Courier New',monospace" font-size="17" font-weight="bold" fill="#00f0ff" text-anchor="middle">NEON DRIFT — Game Loop State Machine</text>
+<line x1="40" y1="44" x2="860" y2="44" stroke="#1e1e44" stroke-width="1"/>
+<rect x="260" y="60" width="320" height="46" fill="#28001a" stroke="#ff2fd0" stroke-width="2" rx="23"/>
+<text x="420" y="88" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#ff2fd0" text-anchor="middle">MAIN MENU</text>
+<rect x="260" y="135" width="320" height="93" fill="#002830" stroke="#00f0ff" stroke-width="1.8" rx="5"/>
+<rect x="260" y="135" width="320" height="38" fill="#002830" rx="5"/>
+<rect x="260" y="169" width="320" height="6" fill="#002830" stroke="none"/>
+<line x1="260" y1="173" x2="580" y2="173" stroke="#00f0ff" stroke-width="1"/>
+<text x="420" y="160" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#00f0ff" text-anchor="middle">PRE WAVE</text>
+<text x="270" y="187" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">기지·포탑·스폰포인트 레퍼런스 수집</text>
+<text x="270" y="202" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">자원 필드 스폰 (블록 40개)</text>
+<text x="270" y="217" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">GatherTimer = 60s 설정</text>
+<rect x="260" y="260" width="320" height="93" fill="#002818" stroke="#2fff8a" stroke-width="1.8" rx="5"/>
+<rect x="260" y="260" width="320" height="38" fill="#002818" rx="5"/>
+<rect x="260" y="294" width="320" height="6" fill="#002818" stroke="none"/>
+<line x1="260" y1="298" x2="580" y2="298" stroke="#2fff8a" stroke-width="1"/>
+<text x="420" y="285" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#2fff8a" text-anchor="middle">GATHER</text>
+<text x="270" y="312" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">호버바이크 자유 비행</text>
+<text x="270" y="327" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">자원 블록 파괴 → 자석 채집</text>
+<text x="270" y="342" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">60초 카운트다운</text>
+<rect x="260" y="390" width="320" height="93" fill="#28001a" stroke="#ff2fd0" stroke-width="1.8" rx="5"/>
+<rect x="260" y="390" width="320" height="38" fill="#28001a" rx="5"/>
+<rect x="260" y="424" width="320" height="6" fill="#28001a" stroke="none"/>
+<line x1="260" y1="428" x2="580" y2="428" stroke="#ff2fd0" stroke-width="1"/>
+<text x="420" y="415" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#ff2fd0" text-anchor="middle">COMBAT</text>
+<text x="270" y="442" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">웨이브 몬스터 스폰 펌프</text>
+<text x="270" y="457" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">몬스터 기지 공격 &amp; 플레이어 방어</text>
+<text x="270" y="472" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">OnMonsterKilled() → AliveMonsters 감소</text>
+<polygon points="420,530 550,560 420,590 290,560" fill="#181008" stroke="#ff8a2f" stroke-width="1.8"/>
+<text x="420" y="565" font-family="'Courier New',monospace" font-size="11" font-weight="bold" font-style="normal" fill="#ff8a2f" text-anchor="middle">기지 파괴?</text>
+<rect x="590" y="523" width="160" height="46" fill="#002818" stroke="#ff8a2f" stroke-width="2" rx="23"/>
+<text x="670" y="551" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#ff8a2f" text-anchor="middle">GAME OVER</text>
+<rect x="260" y="630" width="320" height="93" fill="#002830" stroke="#00f0ff" stroke-width="1.8" rx="5"/>
+<rect x="260" y="630" width="320" height="38" fill="#002830" rx="5"/>
+<rect x="260" y="664" width="320" height="6" fill="#002830" stroke="none"/>
+<line x1="260" y1="668" x2="580" y2="668" stroke="#00f0ff" stroke-width="1"/>
+<text x="420" y="655" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#00f0ff" text-anchor="middle">SHOP</text>
+<text x="270" y="682" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">자원으로 8종 강화 구매</text>
+<text x="270" y="697" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">↑↓ 탐색 / Enter 구매</text>
+<text x="270" y="712" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">다음 웨이브 진입 여부 결정</text>
+<polygon points="420,770 560,800 420,830 280,800" fill="#002830" stroke="#00f0ff" stroke-width="1.8"/>
+<text x="420" y="805" font-family="'Courier New',monospace" font-size="11" font-weight="bold" font-style="normal" fill="#00f0ff" text-anchor="middle">WaveIndex == 5?</text>
+<rect x="590" y="763" width="160" height="46" fill="#002818" stroke="#2fff8a" stroke-width="2" rx="23"/>
+<text x="670" y="791" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#2fff8a" text-anchor="middle">VICTORY!</text>
+<line x1="420" y1="106" x2="420" y2="135" stroke="#ff2fd0" stroke-width="1.6"  marker-end="url(#ah_mag)"/>
+<text x="430" y="124" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#ff2fd0" text-anchor="start">StartGame()</text>
+<line x1="420" y1="228" x2="420" y2="260" stroke="#00f0ff" stroke-width="1.6"  marker-end="url(#ah_cyan)"/>
+<text x="430" y="248" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#00f0ff" text-anchor="start">F키 준비 완료</text>
+<line x1="420" y1="353" x2="420" y2="390" stroke="#2fff8a" stroke-width="1.6"  marker-end="url(#ah_grn)"/>
+<text x="430" y="375" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#2fff8a" text-anchor="start">타이머 만료</text>
+<line x1="420" y1="483" x2="420" y2="530" stroke="#ff2fd0" stroke-width="1.6"  marker-end="url(#ah_mag)"/>
+<line x1="420" y1="590" x2="420" y2="630" stroke="#00f0ff" stroke-width="1.6"  marker-end="url(#ah_cyan)"/>
+<text x="430" y="614" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#00f0ff" text-anchor="start">No  (적 전멸)</text>
+<line x1="550" y1="560" x2="590" y2="546" stroke="#ff8a2f" stroke-width="1.6"  marker-end="url(#ah_org)"/>
+<text x="580" y="557" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#ff8a2f" text-anchor="start">Yes</text>
+<line x1="420" y1="723" x2="420" y2="770" stroke="#00f0ff" stroke-width="1.6"  marker-end="url(#ah_cyan)"/>
+<text x="430" y="750" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#00f0ff" text-anchor="start">구매 완료</text>
+<line x1="280" y1="860" x2="205" y2="860" stroke="#00f0ff" stroke-width="1.6" />
+<line x1="205" y1="860" x2="205" y2="181" stroke="#00f0ff" stroke-width="1.6" />
+<line x1="205" y1="181" x2="260" y2="181" stroke="#00f0ff" stroke-width="1.6"  marker-end="url(#ah_cyan)"/>
+<text x="240" y="185" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#00f0ff" text-anchor="start">No (다음 웨이브)</text>
+<line x1="560" y1="800" x2="590" y2="786" stroke="#2fff8a" stroke-width="1.6"  marker-end="url(#ah_grn)"/>
+<text x="585" y="797" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#2fff8a" text-anchor="start">Yes</text>
+<line x1="750" y1="546" x2="775" y2="546" stroke="#ff8a2f" stroke-width="1.6" stroke-dasharray="6,3"/>
+<line x1="775" y1="546" x2="775" y2="83" stroke="#ff8a2f" stroke-width="1.6" stroke-dasharray="6,3"/>
+<line x1="775" y1="83" x2="580" y2="83" stroke="#ff8a2f" stroke-width="1.6" stroke-dasharray="6,3" marker-end="url(#ah_org)"/>
+<line x1="750" y1="786" x2="795" y2="786" stroke="#2fff8a" stroke-width="1.6" stroke-dasharray="6,3"/>
+<line x1="795" y1="786" x2="795" y2="89" stroke="#2fff8a" stroke-width="1.6" stroke-dasharray="6,3" marker-end="url(#ah_grn)"/>
+<rect x="758" y="44" width="54" height="16" fill="#0e0e22" stroke="#6677aa" stroke-width="0.8" rx="3"/>
+<text x="785" y="56" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="middle">R키 재시작</text>
+<text x="240" y="145" font-family="'Courier New',monospace" font-size="9" font-weight="normal" font-style="normal" fill="#00f0ff" text-anchor="end">PHASE 1</text>
+<text x="240" y="270" font-family="'Courier New',monospace" font-size="9" font-weight="normal" font-style="normal" fill="#2fff8a" text-anchor="end">PHASE 2</text>
+<text x="240" y="400" font-family="'Courier New',monospace" font-size="9" font-weight="normal" font-style="normal" fill="#ff2fd0" text-anchor="end">PHASE 3</text>
+<text x="240" y="640" font-family="'Courier New',monospace" font-size="9" font-weight="normal" font-style="normal" fill="#00f0ff" text-anchor="end">PHASE 4</text>
+</svg>

@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+<defs>
+<marker id="ah_cyan" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#00f0ff"/></marker>
+<marker id="ah_mag" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#ff2fd0"/></marker>
+<marker id="ah_org" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#ff8a2f"/></marker>
+<marker id="ah_grn" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#2fff8a"/></marker>
+<marker id="ah_gray" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#6677aa"/></marker>
+</defs>
+<rect width="800" height="1000" fill="#0d0d1a"/>
+<line x1="0" y1="0" x2="0" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="50" y1="0" x2="50" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="100" y1="0" x2="100" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="150" y1="0" x2="150" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="200" y1="0" x2="200" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="250" y1="0" x2="250" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="300" y1="0" x2="300" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="350" y1="0" x2="350" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="400" y1="0" x2="400" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="450" y1="0" x2="450" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="500" y1="0" x2="500" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="550" y1="0" x2="550" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="600" y1="0" x2="600" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="650" y1="0" x2="650" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="700" y1="0" x2="700" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="750" y1="0" x2="750" y2="1000" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="0" x2="800" y2="0" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="50" x2="800" y2="50" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="100" x2="800" y2="100" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="150" x2="800" y2="150" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="200" x2="800" y2="200" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="250" x2="800" y2="250" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="300" x2="800" y2="300" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="350" x2="800" y2="350" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="400" x2="800" y2="400" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="450" x2="800" y2="450" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="500" x2="800" y2="500" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="550" x2="800" y2="550" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="600" x2="800" y2="600" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="650" x2="800" y2="650" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="700" x2="800" y2="700" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="750" x2="800" y2="750" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="800" x2="800" y2="800" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="850" x2="800" y2="850" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="900" x2="800" y2="900" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<line x1="0" y1="950" x2="800" y2="950" stroke="#fff" stroke-width="0.12" opacity="0.07"/>
+<text x="400" y="34" font-family="'Courier New',monospace" font-size="17" font-weight="bold" fill="#00f0ff" text-anchor="middle">NEON DRIFT — Combat & Damage Processing Flow</text>
+<line x1="40" y1="44" x2="760" y2="44" stroke="#1e1e44" stroke-width="1"/>
+<rect x="230" y="60" width="300" height="44" fill="#28001a" stroke="#ff2fd0" stroke-width="2" rx="22"/>
+<text x="380" y="87" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#ff2fd0" text-anchor="middle">전투 단계 시작 (COMBAT)</text>
+<rect x="230" y="130" width="300" height="78" fill="#002830" stroke="#00f0ff" stroke-width="1.8" rx="5"/>
+<rect x="230" y="130" width="300" height="38" fill="#002830" rx="5"/>
+<rect x="230" y="164" width="300" height="6" fill="#002830" stroke="none"/>
+<line x1="230" y1="168" x2="530" y2="168" stroke="#00f0ff" stroke-width="1"/>
+<text x="380" y="155" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#00f0ff" text-anchor="middle">몬스터 스폰 펌프 (Tick)</text>
+<text x="240" y="182" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">SpawnAccum += DeltaTime</text>
+<text x="240" y="197" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">SpawnAccum &gt;= SpawnInterval → 스폰</text>
+<rect x="230" y="228" width="300" height="78" fill="#28001a" stroke="#ff2fd0" stroke-width="1.8" rx="5"/>
+<rect x="230" y="228" width="300" height="38" fill="#28001a" rx="5"/>
+<rect x="230" y="262" width="300" height="6" fill="#28001a" stroke="none"/>
+<line x1="230" y1="266" x2="530" y2="266" stroke="#ff2fd0" stroke-width="1"/>
+<text x="380" y="253" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#ff2fd0" text-anchor="middle">AMonster 기지 추적</text>
+<text x="240" y="280" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">TargetLoc = Base-&gt;GetActorLocation()</text>
+<text x="240" y="295" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">Wander 오프셋으로 경로 다변화</text>
+<polygon points="380,328 520,356 380,384 240,356" fill="#181008" stroke="#ff8a2f" stroke-width="1.8"/>
+<text x="380" y="361" font-family="'Courier New',monospace" font-size="11" font-weight="bold" font-style="normal" fill="#ff8a2f" text-anchor="middle">기지 공격 범위 진입?</text>
+<rect x="230" y="414" width="300" height="78" fill="#281000" stroke="#ff8a2f" stroke-width="1.8" rx="5"/>
+<rect x="230" y="414" width="300" height="38" fill="#281000" rx="5"/>
+<rect x="230" y="448" width="300" height="6" fill="#281000" stroke="none"/>
+<line x1="230" y1="452" x2="530" y2="452" stroke="#ff8a2f" stroke-width="1"/>
+<text x="380" y="439" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#ff8a2f" text-anchor="middle">Base.TakeHit(AttackDPS·Dt, 0)</text>
+<text x="240" y="466" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">IDamageable 인터페이스 호출</text>
+<text x="240" y="481" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">HP 감소 → MID 피격 플래시</text>
+<polygon points="380,512 480,538 380,564 280,538" fill="#181008" stroke="#ff8a2f" stroke-width="1.8"/>
+<text x="380" y="543" font-family="'Courier New',monospace" font-size="11" font-weight="bold" font-style="normal" fill="#ff8a2f" text-anchor="middle">Base HP &lt;= 0?</text>
+<rect x="230" y="594" width="300" height="78" fill="#002830" stroke="#00f0ff" stroke-width="1.8" rx="5"/>
+<rect x="230" y="594" width="300" height="38" fill="#002830" rx="5"/>
+<rect x="230" y="628" width="300" height="6" fill="#002830" stroke="none"/>
+<line x1="230" y1="632" x2="530" y2="632" stroke="#00f0ff" stroke-width="1"/>
+<text x="380" y="619" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#00f0ff" text-anchor="middle">플레이어 / 포탑 반격</text>
+<text x="240" y="646" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">LineTrace → Execute_TakeHit(Dmg, Power)</text>
+<text x="240" y="661" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">Monster HP 감소</text>
+<polygon points="380,692 490,718 380,744 270,718" fill="#002830" stroke="#00f0ff" stroke-width="1.8"/>
+<text x="380" y="723" font-family="'Courier New',monospace" font-size="11" font-weight="bold" font-style="normal" fill="#00f0ff" text-anchor="middle">Monster HP &lt;= 0?</text>
+<rect x="230" y="774" width="300" height="78" fill="#002818" stroke="#2fff8a" stroke-width="1.8" rx="5"/>
+<rect x="230" y="774" width="300" height="38" fill="#002818" rx="5"/>
+<rect x="230" y="808" width="300" height="6" fill="#002818" stroke="none"/>
+<line x1="230" y1="812" x2="530" y2="812" stroke="#2fff8a" stroke-width="1"/>
+<text x="380" y="799" font-family="'Courier New',monospace" font-size="13" font-weight="bold" font-style="normal" fill="#2fff8a" text-anchor="middle">OnMonsterKilled()</text>
+<text x="240" y="826" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">AliveMonsters--</text>
+<text x="240" y="841" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="start">파티클·사운드 재생</text>
+<polygon points="380,872 500,898 380,924 260,898" fill="#181008" stroke="#2fff8a" stroke-width="1.8"/>
+<text x="380" y="903" font-family="'Courier New',monospace" font-size="11" font-weight="bold" font-style="normal" fill="#2fff8a" text-anchor="middle">AliveMonsters == 0?</text>
+<rect x="511" y="518" width="128" height="40" fill="#281000" stroke="#ff8a2f" stroke-width="2" rx="20"/>
+<text x="575" y="542" font-family="'Courier New',monospace" font-size="12" font-weight="bold" font-style="normal" fill="#ff8a2f" text-anchor="middle">GAME OVER</text>
+<rect x="320" y="950" width="120" height="40" fill="#002830" stroke="#00f0ff" stroke-width="2" rx="20"/>
+<text x="380" y="974" font-family="'Courier New',monospace" font-size="12" font-weight="bold" font-style="normal" fill="#00f0ff" text-anchor="middle">→ SHOP 진입</text>
+<line x1="380" y1="104" x2="380" y2="130" stroke="#ff2fd0" stroke-width="1.6"  marker-end="url(#ah_mag)"/>
+<line x1="380" y1="208" x2="380" y2="228" stroke="#00f0ff" stroke-width="1.6"  marker-end="url(#ah_cyan)"/>
+<line x1="380" y1="306" x2="380" y2="328" stroke="#ff2fd0" stroke-width="1.6"  marker-end="url(#ah_mag)"/>
+<line x1="380" y1="384" x2="380" y2="414" stroke="#ff8a2f" stroke-width="1.6"  marker-end="url(#ah_org)"/>
+<text x="390" y="403" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#ff8a2f" text-anchor="start">Yes</text>
+<line x1="240" y1="410" x2="165" y2="410" stroke="#6677aa" stroke-width="1.6" stroke-dasharray="6,3"/>
+<line x1="165" y1="410" x2="165" y2="267" stroke="#6677aa" stroke-width="1.6" stroke-dasharray="6,3"/>
+<line x1="165" y1="267" x2="230" y2="267" stroke="#6677aa" stroke-width="1.6" stroke-dasharray="6,3" marker-end="url(#ah_gray)"/>
+<rect x="107" y="242" width="61" height="16" fill="#0e0e22" stroke="#6677aa" stroke-width="0.8" rx="3"/>
+<text x="137" y="254" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="middle">No (이동)</text>
+<line x1="380" y1="492" x2="380" y2="512" stroke="#ff8a2f" stroke-width="1.6"  marker-end="url(#ah_org)"/>
+<line x1="480" y1="538" x2="511" y2="538" stroke="#ff8a2f" stroke-width="1.6"  marker-end="url(#ah_org)"/>
+<text x="505" y="542" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#ff8a2f" text-anchor="start">Yes</text>
+<line x1="380" y1="564" x2="380" y2="594" stroke="#00f0ff" stroke-width="1.6"  marker-end="url(#ah_cyan)"/>
+<text x="390" y="583" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#00f0ff" text-anchor="start">No</text>
+<line x1="380" y1="672" x2="380" y2="692" stroke="#00f0ff" stroke-width="1.6"  marker-end="url(#ah_cyan)"/>
+<line x1="270" y1="770" x2="160" y2="770" stroke="#6677aa" stroke-width="1.6" stroke-dasharray="6,3"/>
+<line x1="160" y1="770" x2="160" y2="633" stroke="#6677aa" stroke-width="1.6" stroke-dasharray="6,3"/>
+<line x1="160" y1="633" x2="230" y2="633" stroke="#6677aa" stroke-width="1.6" stroke-dasharray="6,3" marker-end="url(#ah_gray)"/>
+<rect x="102" y="608" width="61" height="16" fill="#0e0e22" stroke="#6677aa" stroke-width="0.8" rx="3"/>
+<text x="132" y="620" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="middle">No (생존)</text>
+<line x1="380" y1="744" x2="380" y2="774" stroke="#2fff8a" stroke-width="1.6"  marker-end="url(#ah_grn)"/>
+<text x="390" y="763" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#2fff8a" text-anchor="start">Yes</text>
+<line x1="380" y1="852" x2="380" y2="872" stroke="#2fff8a" stroke-width="1.6"  marker-end="url(#ah_grn)"/>
+<line x1="380" y1="924" x2="380" y2="950" stroke="#2fff8a" stroke-width="1.6"  marker-end="url(#ah_grn)"/>
+<text x="390" y="941" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#2fff8a" text-anchor="start">Yes (웨이브 클리어)</text>
+<line x1="260" y1="952" x2="165" y2="952" stroke="#00f0ff" stroke-width="1.6" stroke-dasharray="6,3"/>
+<line x1="165" y1="952" x2="165" y2="169" stroke="#00f0ff" stroke-width="1.6" stroke-dasharray="6,3"/>
+<line x1="165" y1="169" x2="230" y2="169" stroke="#00f0ff" stroke-width="1.6" stroke-dasharray="6,3" marker-end="url(#ah_cyan)"/>
+<rect x="107" y="144" width="61" height="16" fill="#0e0e22" stroke="#6677aa" stroke-width="0.8" rx="3"/>
+<text x="137" y="156" font-family="'Courier New',monospace" font-size="10" font-weight="normal" font-style="normal" fill="#6677aa" text-anchor="middle">No (계속)</text>
+</svg>

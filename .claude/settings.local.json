@@ -59,7 +59,8 @@
       "PowerShell(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\user\\\\Downloads\\\\loconv\" | Out-Null; $lo = \"C:\\\\Program Files\\\\LibreOffice\\\\program\\\\soffice.exe\"; $p = Start-Process -FilePath $lo -ArgumentList '--headless','--nologo','--nofirststartwizard','--convert-to','pdf','--outdir','C:\\\\Users\\\\user\\\\Downloads\\\\loconv','C:\\\\Users\\\\user\\\\Downloads\\\\NEONDRIFT_기획서_fixed.docx' -Wait -PassThru -NoNewWindow; \"exit code: $\\($p.ExitCode\\)\"; Get-ChildItem \"C:\\\\Users\\\\user\\\\Downloads\\\\loconv\" | Select-Object Name,Length)",
       "Bash(node neondrift_v2.js)",
       "Bash(python -c \"import cairosvg; cairosvg.svg2png\\(url=r'C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\docs\\\\Images\\\\class_diagram.svg', write_to=r'C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\docs\\\\Images\\\\class_diagram_preview.png', scale=1.5\\)\")",
-      "Bash(\"C:/Program Files/Inkscape/bin/inkscape.exe\" --version)"
+      "Bash(\"C:/Program Files/Inkscape/bin/inkscape.exe\" --version)",
+      "Bash(python gen_flowcharts.py)"
     ]
   }
 }
