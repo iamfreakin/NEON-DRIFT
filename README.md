@@ -131,7 +131,7 @@ if (HomingTarget.IsValid())
 
 ## 아키텍처
 
-![Class Diagram](docs/Images/class_diagram.svg)
+![Class Diagram](docs/Images/class_diagram_preview.png)
 
 | 계층 | 클래스 | 역할 |
 |---|---|---|
@@ -153,21 +153,21 @@ if (HomingTarget.IsValid())
 <details>
 <summary>게임 루프 상태머신</summary>
 
-![Game Loop Flowchart](docs/Images/flowchart_game_loop.svg)
+![Game Loop Flowchart](docs/Images/flowchart_game_loop_preview.png)
 
 </details>
 
 <details>
 <summary>자원 채집 흐름</summary>
 
-![Resource Collection Flowchart](docs/Images/flowchart_resource.svg)
+![Resource Collection Flowchart](docs/Images/flowchart_resource_preview.png)
 
 </details>
 
 <details>
 <summary>전투 & 피해 처리 흐름</summary>
 
-![Combat Flowchart](docs/Images/flowchart_combat.svg)
+![Combat Flowchart](docs/Images/flowchart_combat_preview.png)
 
 </details>
 
