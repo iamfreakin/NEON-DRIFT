@@ -60,7 +60,8 @@
       "Bash(node neondrift_v2.js)",
       "Bash(python -c \"import cairosvg; cairosvg.svg2png\\(url=r'C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\docs\\\\Images\\\\class_diagram.svg', write_to=r'C:\\\\Users\\\\user\\\\Documents\\\\Unreal Projects\\\\NEONDRIFT\\\\docs\\\\Images\\\\class_diagram_preview.png', scale=1.5\\)\")",
       "Bash(\"C:/Program Files/Inkscape/bin/inkscape.exe\" --version)",
-      "Bash(python gen_flowcharts.py)"
+      "Bash(python gen_flowcharts.py)",
+      "PowerShell(python -c \"import fitz; import reportlab; print\\('fitz:', fitz.__version__\\)\")"
     ]
   }
 }
