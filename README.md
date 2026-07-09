@@ -1,60 +1,120 @@
 # NEON DRIFT — 중력 없는 아케이드 웨이브 디펜스
 
-▶︎ [랜딩 페이지](https://iamfreakin.github.io/NEON-DRIFT/) &nbsp;|&nbsp; ▶︎ [소스 코드](https://github.com/iamfreakin/NEON-DRIFT) &nbsp;|&nbsp; ▶︎ [구현 설계서](docs/NEONDRIFT_설계서.pdf) &nbsp;|&nbsp; ▶︎ [실행 파일 다운로드](https://drive.google.com/file/d/1C71W51GIf9KWpUrPd3QW4Mcj6TCb8lJ-/view?usp=sharing)
+3일 안에 채집, 전투, 강화, 승패 판정까지 이어지는 게임 루프를 Unreal C++ 중심으로 닫은 3D 아케이드 웨이브 디펜스 프로젝트입니다.
 
-![게임플레이](docs/Images/몬스터방향%20공중.gif)
+[랜딩 페이지](https://iamfreakin.github.io/NEON-DRIFT/) | [소스 코드](https://github.com/iamfreakin/NEON-DRIFT) | [Portfolio Hub](https://github.com/iamfreakin/GamePortfolio) | [구현 설계서](docs/NEONDRIFT_설계서.pdf) | [게임 기획서](docs/NEONDRIFT_기획서.pdf) | [실행 파일 다운로드](https://drive.google.com/file/d/1C71W51GIf9KWpUrPd3QW4Mcj6TCb8lJ-/view?usp=sharing)
 
----
+![공중 전투](docs/Images/몬스터방향%20공중.gif)
 
-## 한 줄 요약
+## Overview
 
-장르: 3D 아케이드 웨이브 디펜스 &nbsp;/&nbsp; 제작 기간: 3일 &nbsp;/&nbsp; 사용 기술: Unreal Engine 5.8 · C++20 &nbsp;/&nbsp; 1인 개발
+| 항목 | 내용 |
+| --- | --- |
+| 장르 | 3D 아케이드 웨이브 디펜스 |
+| 엔진/언어 | Unreal Engine 5.8, C++20 |
+| 개발 형태 | 1인 개발 |
+| 개발 기간 | 3일 |
+| Repository | [iamfreakin/NEON-DRIFT](https://github.com/iamfreakin/NEON-DRIFT) |
 
-UE 5.8 C++ Blank Template에서 시작해 3일 안에 채집 → 전투 → 강화로 이어지는 게임 루프 전체를 완성했다. 아이디어를 나열하는 것보다 하나의 루프를 끝까지 파고들어 구동 가능한 결과물로 만드는 것이 목표였다. Blueprint 없이 순수 C++로 게임 로직 전체를 작성했으며, 설계 문서를 먼저 확정하고 코딩을 시작하는 방식으로 3일 스프린트를 완수했다.
+UE 5.8 C++ Blank Template에서 시작해 3일 안에 채집 → 전투 → 강화로 이어지는 게임 루프 전체를 완성했습니다. 기능을 많이 시작하기보다 하나의 루프를 끝까지 구동 가능한 결과물로 만드는 것을 목표로 했습니다.
 
----
+## Gameplay Preview
 
-## 핵심 기능
+### 시작 화면
 
-1. **7단계 상태머신** — 코드보다 설계가 먼저라고 생각한다. 전이 조건을 문서로 확정하고 코딩을 시작했고, 3일 내내 아키텍처 수정 0회·상태 충돌 버그 0건
-2. **IDamageable 인터페이스** — 피격 대상 4종을 단일 인터페이스 캐스트로 처리, 새 대상 추가 시 발사 로직 수정 불필요
-3. **Blueprint 0% 코드베이스** — Enhanced Input · HUD를 `.uasset` 없이 런타임 생성. 초기 비용이 있어도 전체 로직이 텍스트로 있어야 한다는 원칙을 끝까지 지켰고, `git diff` 한 줄로 모든 변경을 추적할 수 있다
+![시작 화면](docs/Images/시작화면.gif)
 
----
+### 공중 전투
 
-## 내가 직접 만든 부분
+![공중 전투](docs/Images/몬스터방향%20공중.gif)
 
-- C++ 클래스 설계 및 전체 구현 (100%)
-- 상태머신(GameMode), 6DOF 비행 물리(PlayerShip), 자원 채집 자석(ResourceShard), 포탑 탑승·조준(ManualTurret), HUD 전체(NeonHUD)
-- 외부 에셋: UE5 내장 기본 지오메트리·머티리얼만 사용
+### 수동 터렛 전투
 
----
+![터렛 전투](docs/Images/몬스터방향%20터렛.gif)
 
-## 기술적 도전
+### 터렛 조작
 
-**문제**: 상점 진입 시 방향키·Enter 입력이 게임 로직에 전달되지 않음
+![터렛 움직임](docs/Images/터렛%20움직임.gif)
 
-**원인 추적**: UE 입력 파이프라인을 추적하니, `PlayerController → Enhanced Input` 경로와 `UMG 위젯 포커스 트리` 경로가 독립적으로 존재하며 UI 모드에서는 위젯 경로가 이벤트를 선점함을 확인. `FInputModeUIOnly()` 적용 상태에서는 키 이벤트가 게임 로직에 도달하기 전에 소비됨
+### 자원 회수
 
-**해결**: 임시 패치 대신 입력 경로 자체를 단일화 — 상점 UI를 UMG 위젯에서 Canvas HUD 직접 렌더링으로 교체하고 `FInputModeGameOnly()`를 유지. 모든 입력이 PlayerController 한 경로만 통과하게 되어 충돌 구조가 원천 제거됨
+![자원 회수](docs/Images/자석.gif)
 
-**배움**: 버그를 만났을 때 증상부터 막으면 빠르지만, 같은 문제가 다른 방식으로 돌아온다. 근본 원인을 찾아 구조를 바꾸는 게 결국 더 빠르다는 걸 이번에 확인했다.
+### 상점 강화
 
-→ [전체 트러블슈팅 및 설계 결정은 구현 설계서 참조](docs/NEONDRIFT_설계서.pdf)
-→ [기획 의도 및 상세 내용은 게임 기획서 참조](docs/NEONDRIFT_기획서.pdf)
+![상점](docs/Images/상점.gif)
 
----
+## Problem
 
-## 기술 스택
+짧은 기간 프로젝트에서 가장 큰 위험은 기능을 많이 시작하고 아무것도 끝내지 못하는 것입니다. 전투, 자원, 상점이 따로 존재해도 승패 판정까지 이어지지 않으면 완성 루프라고 보기 어렵습니다.
 
-Unreal Engine 5.8 · C++20 · Enhanced Input System · Unreal Build Tool (CLI)
+## Implementation
 
----
+게임 흐름을 `MainMenu`, `PreWave`, `Gather`, `Combat`, `Shop`, `GameOver`, `Victory`의 7단계 상태로 나누고 GameMode에서 전이와 승패 조건을 관리했습니다.
 
-## 조작법
+전투 대상은 `IDamageable` 인터페이스로 묶어 몬스터, 기지, 자원 블록을 같은 피해 처리 구조에 연결했습니다. 상점 입력 문제는 UMG 포커스 트리 우회가 아니라 Canvas HUD 직접 렌더링으로 입력 경로를 단순화해 해결했습니다.
+
+## Key Features
+
+1. **7단계 상태머신**  
+   `MainMenu`, `PreWave`, `Gather`, `Combat`, `Shop`, `GameOver`, `Victory`로 게임 흐름을 분리했습니다.
+
+2. **IDamageable 인터페이스**  
+   몬스터, 기지, 자원 블록처럼 서로 다른 피격 대상을 하나의 피해 처리 계약으로 묶었습니다.
+
+3. **Blueprint 0% 코드베이스**  
+   Enhanced Input, HUD, 게임 로직을 C++ 중심으로 구성해 변경사항을 코드 diff로 추적할 수 있게 했습니다.
+
+4. **Canvas HUD 기반 상점 UI**  
+   UMG 포커스 충돌 대신 Canvas HUD 직접 렌더링으로 입력 경로를 단순화했습니다.
+
+## Architecture
+
+### Game Loop
+
+![게임 루프 다이어그램](docs/Images/flowchart_game_loop_preview.png)
+
+### Combat Flow
+
+![전투 흐름 다이어그램](docs/Images/flowchart_combat_preview.png)
+
+### Resource Flow
+
+![자원 흐름 다이어그램](docs/Images/flowchart_resource_preview.png)
+
+### Class Diagram
+
+![클래스 다이어그램](docs/Images/class_diagram_preview.png)
+
+## My Contribution
+
+- C++ 클래스 설계 및 전체 구현
+- 상태머신(GameMode), 6DOF 비행 물리(PlayerShip), 자원 채집 자석(ResourceShard), 포탑 탑승/조준(ManualTurret), HUD 구현
+- Gather, Combat, Shop, Victory/GameOver로 이어지는 닫힌 게임 루프 연결
+- `IDamageable` 기반 피해 처리 구조 적용
+- 3일 개발 기간에 맞춘 기능 범위 조절
+- 구현 설계서, 기획서, 발표 자료 정리
+
+## Technical Challenge
+
+상점 진입 시 방향키와 Enter 입력이 게임 로직에 전달되지 않는 문제가 있었습니다. 원인은 `PlayerController -> Enhanced Input` 경로와 `UMG 위젯 포커스 트리` 경로가 분리되어 있고, UI 모드에서 위젯 경로가 키 이벤트를 선점한 것이었습니다.
+
+임시 패치 대신 상점 UI를 Canvas HUD 직접 렌더링으로 교체하고 `FInputModeGameOnly()`를 유지했습니다. 입력이 PlayerController 한 경로만 통과하도록 정리해 충돌 구조를 제거했습니다.
+
+## Tech Stack
+
+| 영역 | 내용 |
+| --- | --- |
+| Engine | Unreal Engine 5.8 |
+| Language | C++20 |
+| Input | Enhanced Input System |
+| UI | Canvas HUD |
+| Build | Unreal Build Tool |
+
+## Controls
 
 | 키 | 동작 |
-|---|---|
+| --- | --- |
 | `W` `A` `S` `D` | 기체 이동 |
 | `Space` / `Ctrl` | 상승 / 하강 |
 | `마우스` | 시점 조준 |
@@ -64,21 +124,18 @@ Unreal Engine 5.8 · C++20 · Enhanced Input System · Unreal Build Tool (CLI)
 | `↑` `↓` / `Enter` | 상점 항목 이동 / 구매 |
 | `R` | 재시작 |
 
----
+## Build
 
-## 빌드 방법
+1. Unreal Engine 5.8 설치
+2. `NEONDRIFT.uproject` 우클릭 후 Generate Visual Studio project files 실행
+3. `Build.bat NEONDRIFTEditor Win64 Development -Project="<경로>/NEONDRIFT.uproject"` 실행
+4. Unreal Editor에서 PIE 실행
 
-1. UE 5.8 설치 후 `NEONDRIFT.uproject` 우클릭 → **Generate Visual Studio project files**
-2. `Build.bat NEONDRIFTEditor Win64 Development -Project="<경로>/NEONDRIFT.uproject"` 실행
-3. `.uproject`를 UE 5.8 에디터로 열고 **PIE(Play In Editor)** 실행
+## Documents
 
----
-
-## 문서
-
-- [구현 설계서](docs/NEONDRIFT_설계서.pdf) — 아키텍처 · 클래스 구조 · 트러블슈팅 전체
-- [게임 기획서](docs/NEONDRIFT_기획서.pdf) — 기획 의도 · 규칙 · 밸런스
-- [발표 자료](docs/NEONDRIFT_발표자료.pdf) — 발표 슬라이드
+- [구현 설계서](docs/NEONDRIFT_설계서.pdf): 아키텍처, 클래스 구조, 트러블슈팅
+- [게임 기획서](docs/NEONDRIFT_기획서.pdf): 기획 의도, 규칙, 밸런스
+- [발표 자료](docs/NEONDRIFT_발표자료.pdf): 발표 슬라이드
 
 ---
 
