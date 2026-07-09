@@ -2,7 +2,7 @@
 
 3일 안에 채집, 전투, 강화, 승패 판정까지 이어지는 게임 루프를 Unreal C++ 중심으로 닫은 3D 아케이드 웨이브 디펜스 프로젝트입니다.
 
-[랜딩 페이지](https://iamfreakin.github.io/NEON-DRIFT/) | [소스 코드](https://github.com/iamfreakin/NEON-DRIFT) | [Portfolio Hub](https://github.com/iamfreakin/GamePortfolio) | [구현 설계서](docs/NEONDRIFT_설계서.pdf) | [게임 기획서](docs/NEONDRIFT_기획서.pdf) | [실행 파일 다운로드](https://drive.google.com/file/d/1C71W51GIf9KWpUrPd3QW4Mcj6TCb8lJ-/view?usp=sharing)
+[랜딩 페이지](https://iamfreakin.github.io/NEON-DRIFT/) | [소스 코드](https://github.com/iamfreakin/NEON-DRIFT) | [구현 설계서](docs/NEONDRIFT_설계서.pdf) | [게임 기획서](docs/NEONDRIFT_기획서.pdf) | [실행 파일 다운로드](https://drive.google.com/file/d/1C71W51GIf9KWpUrPd3QW4Mcj6TCb8lJ-/view?usp=sharing)
 
 ![공중 전투](docs/Images/몬스터방향%20공중.gif)
 
